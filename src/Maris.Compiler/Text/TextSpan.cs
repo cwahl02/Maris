@@ -1,11 +1,11 @@
-namespace Maris.Compiler;
+namespace Maris.Compiler.Text;
 
-public readonly struct TextLine
+public readonly struct TextSpan
 {
     public int Start { get; }
     public int Length { get; }
     public int End => Start + Length;
-    public TextLine(int start, int length)
+    public TextSpan(int start, int length)
     {
         Start = start;
         Length = length;

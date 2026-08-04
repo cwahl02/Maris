@@ -1,5 +1,6 @@
+using Maris.Compiler.Lexing;
+using Maris.Compiler.Text;
 using Xunit;
-using Maris.Compiler;
 
 namespace Maris.Tests;
 

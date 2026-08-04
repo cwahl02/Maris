@@ -1,4 +1,4 @@
-﻿namespace Maris.Compiler;
+﻿namespace Maris.Compiler.Text;
 
 public sealed class SourceFile
 {
