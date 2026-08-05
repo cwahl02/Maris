@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Maris.Cli/Maris.Cli.csproj" />
+    <Project Path="src/Maris.Compiler/Maris.Compiler.csproj" />
+    <Project Path="src/Maris.Core/Maris.Core.csproj" />
+    <Project Path="src/Maris.Tests/Maris.Tests.csproj" />
+  </Folder>
+</Solution>
