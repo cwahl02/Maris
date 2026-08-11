@@ -27,6 +27,10 @@ public sealed partial class Lexer
         {
             return MakeToken(TokenType.MinusMinus, start, 2);
         }
+        else if (TryMatch("->"))
+        {
+            return MakeToken(TokenType.Arrow, start, 2);
+        }
         else if (TryMatch("-="))
         {
             return MakeToken(TokenType.MinusEqual, start, 2);

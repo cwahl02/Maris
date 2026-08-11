@@ -1,0 +1,33 @@
+ImportDirective ::=
+    "import" Identifier ("." Identifier)* ("as" Identifier)? ";"
+
+NamedDeclaration ::=
+    EnumDeclaration
+    StructDeclaration
+    UnionDeclaration
+    AliasDeclaration
+    DistinctDeclaration
+    FunctionDeclaration
+
+Statement ::=
+    BlockStatement |
+    IfStatement |
+    
+
+IfStatement ::=
+    "if" Expression (":" Statement | "{" BlockStatement "}")
+
+VariableDeclaration ::=
+    IDENT (ExplicitTyped ('=' ExpressionStatement)?|InferedTyped ExpressionStatement)
+
+ExplicitTyped ::=
+    (Type+) (':'|'::')
+
+InferedTyped ::=
+    (':='|'::=')
+
+StructDefinition ::=
+    IDENT '::' 'struct' '{' StructField+ '}'
+
+StructField ::=
+    IDENT 

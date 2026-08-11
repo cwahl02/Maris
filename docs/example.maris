@@ -1,0 +1,124 @@
+import std.io as io;
+
+/* Function overloading via parameter types */
+add :: (x, y: i32) -> i32 {
+    return x + y;
+}
+
+add :: (x, y: f32) -> f32 {
+    return x + y;
+}
+
+/**/
+
+/* Generic Function where T is infered by parameters passed */
+// Paramters types that are used together in operations must match
+// But I might have to think more on this one
+sub :: (x, y: T) -> T {
+    return x - y;
+}
+
+/**/
+
+/* Multi-return values */
+swap :: (x, y: i32) -> i32, i32 {
+    return y, x;
+}
+
+/**/
+
+/* Compile-time stuff */
+#if target.OS == target.Windows
+    target_os_name ::= "Windows";
+#else if target.os == target.Linux
+    target_os_name ::= "Linux";
+#endif
+/**/
+
+/* Compile-time evaluation */
+number ::= #run add(1,2);
+/**/
+
+main :: () -> i32 {
+    // Explicit function qualification
+    io.print("Hello World!\n");
+
+    return 0;
+}
+
+/* User-defined type (struct) */
+Person :: struct {
+    name: string;
+    age: Age;
+}
+
+// Distinct makes compiler treat as a unique type.
+Age :: distinct u8;
+
+// Alias equivalent to 'typedef' in C
+Integer :: alias i64;
+
+/**/
+
+DynamicArray<T> :: struct {
+    // I originally had it '^T' as a 'ownership' pointer but I was more worried about
+    // the lifetime rather than access of it so I decided to do '!T' as it being more
+    // of a linear variable kind of thing, cause really I care more about it being the
+    // one to free the memory. Is compile-time feature
+    data: !T = null;
+    capacity: u64 = 0;
+    size: u64 = 0;
+}
+
+Init :: (darray: &DynamicArray<T>, capacity: u64) -> bool {
+    if !darray || darray.data != null:
+        return false;
+
+    darray.data = std.mem.alloc(T.sizeof * capacity);
+    if darray.data == null:
+        return false;
+
+    darray.capacity = capacity;
+
+    return true;
+}
+
+Free :: (darray: &DynamicArray<T>) -> bool {
+    if !darray || !darray.data:
+        return false;
+
+    std.mem.free(darray.data);
+    darray.data = null;
+    darray.capacity = 0;s
+    darray.size = 0;
+
+    return true;
+}
+
+Vec2 :: struct {
+    x, y: f32;
+}
+
+Circle :: struct {
+    // My idea with embed is allowing me to do 'x: Circle; x.x'
+    // like as if it was directly apart of Circle
+    center: embed Vec2;
+    radius: f32;
+}
+
+Triangle :: struct {
+    base: f32;
+    height: f32;
+}
+
+Shape :: union {
+    Circle,
+    Triangle
+}
+
+print :: (s: Shape) -> void {
+    match s {
+        Circle => io.print("Circle\n")
+        Triangle => io.print("Triangle\n")
+    }
+}

@@ -3,6 +3,8 @@ using Xunit;
 
 public partial class LexerTests
 {
+    // TODO: Make string field nullable to make it
+    // so you only have to pass in strings for identifiers and literals
     private void Equal(
         string source,
         params (TokenType type, string text)[] expectedTokens)

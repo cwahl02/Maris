@@ -116,4 +116,7 @@ public enum TokenType
     Array,
     Slice,
 
+    Import,
+    Module,
+    As
 }
