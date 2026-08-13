@@ -62,8 +62,14 @@ public sealed partial class Lexer
             "struct" => TokenType.Struct,
             "union" => TokenType.Union,
 
-            "array" => TokenType.Array,
-            "slice" => TokenType.Slice,
+            "import" => TokenType.Import,
+            "module" => TokenType.Module,
+            "as" => TokenType.As,
+            "foreign" => TokenType.Foreign,
+            "null" => TokenType.Null,
+            "sizeof" => TokenType.Sizeof,
+            "typeof" => TokenType.Typeof,
+            "move" => TokenType.Move,
             _ => TokenType.Identifier
         };
     }

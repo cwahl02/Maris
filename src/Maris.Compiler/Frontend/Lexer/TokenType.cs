@@ -116,4 +116,13 @@ public enum TokenType
     Array,
     Slice,
 
+    Import,
+    Module,
+    As,
+    Foreign,
+    Null,
+
+    Sizeof,
+    Typeof,
+    Move
 }

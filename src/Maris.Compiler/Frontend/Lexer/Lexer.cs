@@ -47,7 +47,24 @@ public sealed partial class Lexer
             return LexIdentifier();
             // Add token to the list of tokens
         }
-
+        else if (Char.IsDigit(_current))
+        {
+            return LexNumber();
+        }
+        else if (_current == '"')
+        {
+            return LexString();
+        }
+        else if (_current == '\'')
+        {
+            return LexCharacter();
+        }
+        else if (_current == '.' && Char.IsDigit(_peek(1)))
+        {
+            return LexNumber();
+        }
+    
+        
         return _current switch
         {
             '+' => LexPlus(),
