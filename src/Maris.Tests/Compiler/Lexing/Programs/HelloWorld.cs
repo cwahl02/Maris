@@ -2,7 +2,7 @@ using Maris.Compiler.Lexing;
 
 namespace Maris.Tests.Compiler.Lexing;
 
-public class HelloWorld
+public class HelloWorld1
 {
     [Fact]
     public void LexProgram_HelloWorld_ShouldReturnTokens()
