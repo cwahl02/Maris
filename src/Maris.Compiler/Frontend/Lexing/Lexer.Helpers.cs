@@ -1,4 +1,4 @@
-namespace Maris.Compiler.Lexer;
+namespace Maris.Compiler.Lexing;
 
 using Maris.Core.Text;
 
@@ -9,11 +9,11 @@ public sealed partial class Lexer
 
     private void SkipTrivia()
     {
-        while (!_isAtEnd)
+        while (!IsAtEnd)
         {
-            if(char.IsWhiteSpace(_current))
+            if(char.IsWhiteSpace(Current))
             {
-                _advance();
+                Advance();
                 continue;
             }
 
@@ -33,16 +33,16 @@ public sealed partial class Lexer
 
     private bool TrySkipLineComment()
     {
-        if (_current != '/' || _peek(1) != '/')
+        if (Current != '/' || Peek(1) != '/')
         {
             return false;
         }
 
-        _advance(2); // Skip the '//' characters
+        Advance(2); // Skip the '//' characters
 
-        while (!_isAtEnd && _current != '\n')
+        while (!IsAtEnd && Current != '\n')
         {
-            _advance();
+            Advance();
         }
 
         return true;
@@ -50,30 +50,30 @@ public sealed partial class Lexer
 
     private bool TrySkipBlockComment()
     {
-        if (_current != '/' || _peek(1) != '*')
+        if (Current != '/' || Peek(1) != '*')
         {
             return false;
         }
 
-        _advance(2); // Skip the '/*' characters
+        Advance(2); // Skip the '/*' characters
 
         int depth = 1; // Track the depth of nested block comments
-        while (!_isAtEnd && depth > 0)
+        while (!IsAtEnd && depth > 0)
         {
-            if (_current == '/' && _peek(1) == '*')
+            if (Current == '/' && Peek(1) == '*')
             {
-                _advance(2); // Skip the '/*' characters
+                Advance(2); // Skip the '/*' characters
                 depth++;
             }
-            if (_current == '*' && _peek(1) == '/')
+            if (Current == '*' && Peek(1) == '/')
             {
-                _advance(2); // Skip the '*/' characters
+                Advance(2); // Skip the '*/' characters
                 depth--;
                 continue;
             }
             else
             {
-                _advance();
+                Advance();
             }
         }
 
@@ -86,26 +86,26 @@ public sealed partial class Lexer
     {
         for (int i = 0; i < expected.Length; i++)
         {
-            if (_peek(i) != expected[i])
+            if (Peek(i) != expected[i])
             {
                 return false;
             }
         }
 
-        _advance(expected.Length);
+        Advance(expected.Length);
         return true;
     }
 
     private Token LexSingle(TokenType type)
     {
-        var start = _position;
-        _advance();
+        var start = Position;
+        Advance();
         return MakeToken(type, start, 1);
     }
     private Token LexUnknown()
     {
-        var start = _position;
-        _advance();
+        var start = Position;
+        Advance();
         return MakeToken(TokenType.Invalid, start, 1);
     }
 }

@@ -1,54 +1,65 @@
-namespace Maris.Compiler.Lexer;
+namespace Maris.Compiler.Lexing;
 
 using Maris.Core.Text;
 
-public sealed partial class Lexer
+public sealed partial class Lexer(string text)
 {
-    private string _text;
-    private readonly TextWindow _textWindow;
-    private int _position => _textWindow.Position;
-    private char _current => _textWindow.Current;
-    private char _peek(int offset) => _textWindow.Peek(offset);
-    private bool _isAtEnd => _textWindow.IsAtEnd;
-    private void _advance() => _textWindow.Advance();
-    private void _advance(int count) => _textWindow.Advance(count);
-
-    public Lexer(string text)
-    {
-        _text = text;
-        _textWindow = new TextWindow(text);
-    }
+    private readonly string _text = text;
+    private readonly TextWindow _textWindow = new(text);
+    private int Position => _textWindow.Position;
+    private char Current => _textWindow.Current;
+    private char Peek(int offset) => _textWindow.Peek(offset);
+    private bool IsAtEnd => _textWindow.IsAtEnd;
+    private void Advance() => _textWindow.Advance();
+    private void Advance(int count) => _textWindow.Advance(count);
 
     public List<Token> Lex()
     {
         var tokens = new List<Token>();
 
-        while (!_isAtEnd)
+        while (!IsAtEnd)
         {
             SkipTrivia();
 
-            if (_isAtEnd)
+            if (IsAtEnd)
             {
                 break;
             }
-            
+
             tokens.Add(LexToken());
         }
 
-        tokens.Add(MakeToken(TokenType.EOF, _position, 0));
+        tokens.Add(MakeToken(TokenType.EOF, Position, 0));
 
         return tokens;
     }
 
     private Token LexToken()
     {
-        if (IsIdentifierStart(_current))
+        if (IsIdentifierStart(Current))
         {
             return LexIdentifier();
             // Add token to the list of tokens
         }
+        else if (Char.IsDigit(Current))
+        {
+            return LexNumber();
+        }
+        else if (Current == '"')
+        {
+            return LexString();
+        }
+        else if (Current == '\'')
+        {
+            return LexCharacter();
+        }
+        else if (Current == '.' && Char.IsDigit(Peek(1)))
+        {
+            return LexNumber();
+        }
 
-        return _current switch
+
+        return Current switch
         {
             '+' => LexPlus(),
             '-' => LexMinus(),

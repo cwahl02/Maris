@@ -1,26 +1,19 @@
-namespace Maris.Compiler.Lexer;
+namespace Maris.Compiler.Lexing;
 
 using Maris.Core.Text;
 
-public readonly struct Token : IEquatable<Token>
+public readonly struct Token(TokenType type, int start, int length, string text) : IEquatable<Token>
 {
-    private readonly string _text;
-    public TokenType Type { get; }
-    public int Start { get; }
-    public int Length { get; }
+    private readonly string _text = text;
+    public TokenType Type { get; } = type;
+    public int Start { get; } = start;
+    public int Length { get; } = length;
     public ReadOnlySpan<char> Value => _text.AsSpan(Start, Length);
-    public Token(TokenType type, int start, int length, string text)
-    {
-        Type = type;
-        Start = start;
-        Length = length;
-        _text = text;
-    }
 
     public override string ToString()
     {
         // Prints cleanly in xUnit error output: "Identifier: 'foo' [0..3]"
-        return $"{Type}: '{Value.ToString()}' [{Start}..{Start + Length}]";
+        return $"{Type}: '{Value}' [{Start}..{Start + Length}]";
     }
 
 

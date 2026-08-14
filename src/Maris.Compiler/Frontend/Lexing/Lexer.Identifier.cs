@@ -1,4 +1,4 @@
-namespace Maris.Compiler.Lexer;
+namespace Maris.Compiler.Lexing;
 
 using Maris.Core.Text;
 
@@ -6,15 +6,15 @@ public sealed partial class Lexer
 {
     private Token LexIdentifier()
     {
-        var start = _position;
-        while (!_isAtEnd && IsIdentifierPart(_current))
+        var start = Position;
+        while (!IsAtEnd && IsIdentifierPart(Current))
         {
-            _advance();
+            Advance();
         }
 
-        var value = _text.AsSpan(start, _position - start);
+        var value = _text.AsSpan(start, Position - start);
         var type = IsKeyword(value);
-        return MakeToken(type, start, _position - start);
+        return MakeToken(type, start, Position - start);
     }
 
     private static bool IsIdentifierStart(char c) => char.IsLetter(c) || c == '_';
@@ -62,8 +62,14 @@ public sealed partial class Lexer
             "struct" => TokenType.Struct,
             "union" => TokenType.Union,
 
-            "array" => TokenType.Array,
-            "slice" => TokenType.Slice,
+            "import" => TokenType.Import,
+            "module" => TokenType.Module,
+            "as" => TokenType.As,
+            "foreign" => TokenType.Foreign,
+            "null" => TokenType.Null,
+            "sizeof" => TokenType.Sizeof,
+            "typeof" => TokenType.Typeof,
+            "move" => TokenType.Move,
             _ => TokenType.Identifier
         };
     }

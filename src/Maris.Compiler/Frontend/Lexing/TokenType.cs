@@ -1,4 +1,4 @@
-namespace Maris.Compiler.Lexer;
+namespace Maris.Compiler.Lexing;
 
 public enum TokenType
 {
@@ -116,4 +116,13 @@ public enum TokenType
     Array,
     Slice,
 
+    Import,
+    Module,
+    As,
+    Foreign,
+    Null,
+
+    Sizeof,
+    Typeof,
+    Move
 }
