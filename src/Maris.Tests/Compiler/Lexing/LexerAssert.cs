@@ -1,7 +1,7 @@
 using Maris.Compiler.Lexing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+
+namespace Maris.Tests.Compiler.Lexing;
+
 public static class LexerAssert
 {
     public static void DoesNotContainTokenTypeInvalid(IEnumerable<Token> tokens)
