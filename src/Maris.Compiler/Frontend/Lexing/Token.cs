@@ -4,16 +4,16 @@ using Maris.Core.Text;
 
 public readonly struct Token(TokenType type, int start, int length, string text) : IEquatable<Token>
 {
-    private readonly string _text = text;
     public TokenType Type { get; } = type;
+    public string Text { get; } = text;
     public int Start { get; } = start;
     public int Length { get; } = length;
-    public ReadOnlySpan<char> Value => _text.AsSpan(Start, Length);
+    public static Token Eof => new(TokenType.EOF, -1, 0, string.Empty);
 
     public override string ToString()
     {
         // Prints cleanly in xUnit error output: "Identifier: 'foo' [0..3]"
-        return $"{Type}: '{Value}' [{Start}..{Start + Length}]";
+        return $"{Type}: '{Text}' [{Start}..{Start + Length}]";
     }
 
 
