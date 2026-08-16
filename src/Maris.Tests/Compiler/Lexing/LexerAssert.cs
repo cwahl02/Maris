@@ -10,14 +10,14 @@ public static class LexerAssert
         {
             if (token.Type == TokenType.Invalid)
             {
-                throw new Exception($"Token '{token.Value}' is invalid.");
+                throw new Exception($"Token '{token.Text}' is invalid.");
             }
         }
     }
 
     public static void ContainsText(IEnumerable<Token> tokens, params string[] texts)
     {
-        HashSet<string> tokenValues = [.. tokens.Select(t => t.Value.ToString())];
+        HashSet<string> tokenValues = [.. tokens.Select(t => t.Text)];
         foreach (var text in texts)
         {
             if (!tokenValues.Contains(text))
