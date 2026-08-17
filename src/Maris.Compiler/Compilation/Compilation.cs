@@ -1,3 +1,5 @@
+using Maris.Core.Text;
+
 namespace Maris.Compiler.Compilation;
 
 public sealed class Compilation

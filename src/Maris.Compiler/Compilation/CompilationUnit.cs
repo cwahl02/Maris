@@ -1,6 +1,7 @@
 using Maris.Compiler.Syntax.Lexing;
 using Maris.Compiler.Syntax.Parsing;
 using Maris.Core.Diagnostics;
+using Maris.Core.Text;
 
 namespace Maris.Compiler.Compilation;
 
