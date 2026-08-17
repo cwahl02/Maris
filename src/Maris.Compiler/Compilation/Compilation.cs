@@ -10,8 +10,8 @@ public sealed class Compilation
         foreach (var filePath in FilePaths)
         {
             var source = new SourceFile(filePath);
-            var unit = new CompilationUnit(source);
-            Units.Add(unit);
+            //var unit = new CompilationUnit(source);
+            //Units.Add(unit);
         }
     }
 }
