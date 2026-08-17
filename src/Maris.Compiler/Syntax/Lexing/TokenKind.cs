@@ -79,6 +79,9 @@ public enum TokenKind
     Bang,
     BangEqual,
 
+    // Tilde
+    Tilde,
+
     // Keywords
     Import,
     Module,
