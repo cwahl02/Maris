@@ -83,5 +83,10 @@ public sealed partial class Lexer
         return true;
     }
 
-
+    private Token LexSingle(TokenKind kind)
+    {
+        var start = _iterator.Position;
+        _iterator.Forward();
+        return new Token(kind, start, 1);
+    }
 }
