@@ -13,13 +13,14 @@ public sealed class Iterator<T>
     public int Count => _items.Count;
     public bool HasNext => Position < _items.Count - 1;
     public bool HasPrevious => Position > 0;
+    public bool IsAtStart => Position == 0;
     public bool IsAtEnd => Position >= _items.Count;
     public T Current => Position < _items.Count ? _items[Position] : default!;
     public T Peek(int offset = 0) => Position + offset < _items.Count ? _items[Position + offset] : default!;
 
     public void Forward()
     {
-        if (HasNext)
+        if (!IsAtEnd)
             Position++;
     }
 
@@ -27,7 +28,7 @@ public sealed class Iterator<T>
     {
         for (int i = 0; i < count; i++)
         {
-            if (HasNext)
+            if (!IsAtEnd)
                 Position++;
             else
                 break;
@@ -36,7 +37,7 @@ public sealed class Iterator<T>
 
     public void Backward()
     {
-        if (HasPrevious)
+        if (!IsAtStart)
             Position--;
     }
 
@@ -44,7 +45,7 @@ public sealed class Iterator<T>
     {
         for (int i = 0; i < count; i++)
         {
-            if (HasPrevious)
+            if (!IsAtStart)
                 Position--;
             else
                 break;
