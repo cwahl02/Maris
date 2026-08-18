@@ -1,0 +1,41 @@
+import std.mem;
+import std.io as io;
+
+main :: () -> {
+    io.print("Hello World!\n");
+
+    darray: DynamicArray<i32>;
+    Init(&darray);
+    defer Free(&darray);
+
+    print("Goodbye World!\n");
+    return 0;
+}
+
+DynamicArray<T> :: struct {
+    data: !*T = null;
+    capacity: u64 = 0;
+    size: u64 = 0;
+}
+
+Init :: (darray: &DynamicArray<T>, capacity: u64) -> bool {
+    if !darray || darray.data != null || capacity == 0:
+        return false;
+
+    darray.data = std.mem.alloc(T.sizeof * capacity);
+    if !darray.data:
+        return false;
+
+    darray.capacity = capacity;
+
+    return true;
+}
+
+Free :: (darray: &DynamicArray<T>) -> bool {
+    if !darray || !darray.data:
+        return false;
+
+    std.mem.free(darray.data);
+    darray.capacity = 0;
+    darray.size = 0;
+}
