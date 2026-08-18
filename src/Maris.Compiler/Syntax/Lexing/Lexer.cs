@@ -20,6 +20,8 @@ public sealed partial class Lexer
 
         while (!_iterator.IsAtEnd)
         {
+            SkipTrivia();
+
             tokens.Add(LexToken());
         }
 
@@ -30,7 +32,7 @@ public sealed partial class Lexer
 
     private Token LexToken()
     {
-        if (char.IsAsciiLetter(_iterator.Current) || _iterator.Current == '_')
+        if (char.IsAsciiLetter(_iterator.Current) || (_iterator.Current == '_' && char.IsAsciiLetterOrDigit(_iterator.Peek(1))))
         {
             return LexIdentifier();
         }
@@ -46,20 +48,35 @@ public sealed partial class Lexer
         {
             return LexCharacter();
         }
-        throw new NotImplementedException($"Lexing for character '{_iterator.Current}' is not implemented.");
-        // else if (_iterator.Current == '"')
-        // {
-        //     return LexString();
-        // }
-        // else if (_iterator.Current == '\'')
-        // {
-        //     return LexCharacter();
-        // }
-        // else
-        // {
-        //     // Handle other token types or throw an error for unrecognized characters
-        //     throw new NotImplementedException($"Lexing for character '{_iterator.Current}' is not implemented.");
-        // }
-    }
+        
+        return _iterator.Current switch
+        {
+            '&' => LexAmpersand(),
+            '!' => LexBang(),
+            '^' => LexCaret(),
+            ':' => LexColon(),
+            '.' => LexDot(),
+            '=' => LexEqual(),
+            '>' => LexGreater(),
+            '<' => LexLess(),
+            '-' => LexMinus(),
+            '%' => LexPercent(),
+            '|' => LexPipe(),
+            '+' => LexPlus(),
+            '/' => LexSlash(),
+            '*' => LexStar(),
 
+            '~' => LexSingle(TokenKind.Tilde),
+            ',' => LexSingle(TokenKind.Comma),
+            ';' => LexSingle(TokenKind.Semicolon),
+            '(' => LexSingle(TokenKind.LeftParen),
+            ')' => LexSingle(TokenKind.RightParen),
+            '{' => LexSingle(TokenKind.LeftBrace),
+            '}' => LexSingle(TokenKind.RightBrace),
+            '[' => LexSingle(TokenKind.LeftBracket),
+            ']' => LexSingle(TokenKind.RightBracket),
+            '_' => LexSingle(TokenKind.Underscore),
+            _ => LexSingle(TokenKind.Invalid)
+        };
+    }
 }
