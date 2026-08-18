@@ -6,7 +6,7 @@ namespace Maris.Tests.Compiler.Syntax.Lexing;
 public class Bang
 {
     [Fact]
-    public void Lex_Bang_ShouldReturnValid()
+    public void Lex_Bang()
     {
         var text = "! !=";
         var sourceFile = new SourceFile("", text);
@@ -18,7 +18,7 @@ public class Bang
     }
 
     [Fact]
-    public void Lex_Bang_NoWhitespace_ShouldReturnValid()
+    public void Lex_Bang_NoWhitespace()
     {
         var text = "!!=";
         var sourceFile = new SourceFile("", text);

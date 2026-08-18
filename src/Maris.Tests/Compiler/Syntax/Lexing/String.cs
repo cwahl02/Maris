@@ -5,7 +5,7 @@ namespace Maris.Tests.Compiler.Syntax.Lexing;
 public class String
 {
     [Fact]
-    public void LexString_ShouldReturnStringToken()
+    public void Lex_String()
     {
         var text = "\"Hello, World!\"";
         var sourceFile = new SourceFile("", text);
@@ -17,7 +17,7 @@ public class String
     }
 
     [Fact]
-    public void LexString_ShouldReturnInvalid()
+    public void Lex_String_MissingEndQuote()
     {
         var text = "\"Hello, World!";
         var sourceFile = new SourceFile("", text);

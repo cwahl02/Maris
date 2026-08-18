@@ -7,7 +7,7 @@ namespace Maris.Tests.Compiler.Syntax.Lexing;
 public class Binary
 {
     [Fact]
-    public void LexNumber_Binary_ShouldReturnIntegerLiteral()
+    public void Lex_Binary()
     {
         var text = "0b1010";
         var sourceFile = new SourceFile("", text);
@@ -19,7 +19,7 @@ public class Binary
     }
 
     [Fact]
-    public void LexNumber_BinaryUppercase_ShouldReturnIntegerLiteral()
+    public void Lex_Binary_Uppercase()
     {
         var text = "0B1010";
         var sourceFile = new SourceFile("", text);
@@ -31,7 +31,7 @@ public class Binary
     }
 
     [Fact]
-    public void LexNumber_BinaryWithUnderscores_ShouldReturnIntegerLiteral()
+    public void Lex_Binary_WithUnderscores()
     {
         var text = "0b1010_1010";
         var sourceFile = new SourceFile("", text);
@@ -43,7 +43,7 @@ public class Binary
     }
 
     [Fact]
-    public void LexNumber_BinaryWithUnderscoresUppercase_ShouldReturnIntegerLiteral()
+    public void Lex_Binary_WithUnderscoresUppercase()
     {
         var text = "0B1010_1010";
         var sourceFile = new SourceFile("", text);
@@ -55,7 +55,7 @@ public class Binary
     }
 
     [Fact]
-    public void LexNumber_BinaryWithMultipleUnderscores_ShouldReturnIntegerLiteral()
+    public void Lex_Binary_WithMultipleUnderscores()
     {
         var text = "0b1010_1010_1010";
         var sourceFile = new SourceFile("", text);
@@ -67,7 +67,7 @@ public class Binary
     }
 
     [Fact]
-    public void LexNumber_BinaryWithMultipleUnderscoresUppercase_ShouldReturnIntegerLiteral()
+    public void Lex_Binary_WithMultipleUnderscores_Uppercase()
     {
         var text = "0B1010_1010_1010";
         var sourceFile = new SourceFile("", text);
@@ -79,7 +79,7 @@ public class Binary
     }
 
     [Fact]
-    public void LexNumber_BinaryWithLeadingZeros_ShouldReturnIntegerLiteral()
+    public void Lex_Binary_WithLeadingZeros()
     {
         var text = "0b00001010";
         var sourceFile = new SourceFile("", text);
@@ -91,7 +91,7 @@ public class Binary
     }
 
     [Fact]
-    public void LexNumber_BinaryWithLeadingZerosUppercase_ShouldReturnIntegerLiteral()
+    public void Lex_Binary_WithLeadingZeros_Uppercase()
     {
         var text = "0B00001010";
         var sourceFile = new SourceFile("", text);
@@ -103,7 +103,7 @@ public class Binary
     }
 
     [Fact]
-    public void LexNumber_BinaryWithTrailingZeros_ShouldReturnIntegerLiteral()
+    public void Lex_Binary_WithTrailingZeros()
     {
         var text = "0b10100000";
         var sourceFile = new SourceFile("", text);
@@ -115,7 +115,7 @@ public class Binary
     }
 
     [Fact]
-    public void LexNumber_BinaryWithTrailingZerosUppercase_ShouldReturnIntegerLiteral()
+    public void Lex_Binary_WithTrailingZeros_Uppercase()
     {
         var text = "0B10100000";
         var sourceFile = new SourceFile("", text);

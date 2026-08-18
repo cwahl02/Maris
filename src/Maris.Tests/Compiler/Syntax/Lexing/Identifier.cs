@@ -91,4 +91,46 @@ public class Identifier
             TokenKind.Eof
         ));
     }
+
+    [Fact]
+    public void Lex_ControlFlow_Keywords()
+    {
+        var text = "if else while for return defer continue break switch case default";
+        var sourceFile = new SourceFile("", text);
+        var lexer = new Lexer(sourceFile);
+        var tokens = lexer.Lex();
+
+        Assert.True(tokens.Contains(text, "if", "else", "while", "for", "return", "defer", "continue", "break", "switch", "case", "default"));
+        Assert.True(tokens.Contains(
+            TokenKind.If,
+            TokenKind.Else,
+            TokenKind.While,
+            TokenKind.For,
+            TokenKind.Return,
+            TokenKind.Defer,
+            TokenKind.Continue,
+            TokenKind.Break,
+            TokenKind.Switch,
+            TokenKind.Case,
+            TokenKind.Default,
+            TokenKind.Eof
+        ));
+    }
+
+    [Fact]
+    public void Lex_Module_Keywords()
+    {
+        var text = "module import as";
+        var sourceFile = new SourceFile("", text);
+        var lexer = new Lexer(sourceFile);
+        var tokens = lexer.Lex();
+
+        Assert.True(tokens.Contains(text, "module", "import", "as"));
+        Assert.True(tokens.Contains(
+            TokenKind.Module,
+            TokenKind.Import,
+            TokenKind.As,
+            TokenKind.Eof
+        ));
+    }
 }

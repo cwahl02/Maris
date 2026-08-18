@@ -6,7 +6,7 @@ namespace Maris.Tests.Compiler.Syntax.Lexing;
 public class Character
 {
     [Fact]
-    public void LexCharacter_ShouldReturnCharacterLiteralToken()
+    public void Lex_Character()
     {
         var text = "'a'";
         var sourceFile = new SourceFile("", text);
@@ -18,7 +18,7 @@ public class Character
     }
 
     [Fact]
-    public void LexCharacter_ShouldReturnInvalid()
+    public void Lex_Character_MissingEndQuote()
     {
         var text = "'a";
         var sourceFile = new SourceFile("", text);
