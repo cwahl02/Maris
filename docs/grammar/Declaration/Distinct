@@ -1,0 +1,5 @@
+DistinctDeclaration
+    := Identifier '::' 'distinct' Type ';'
+
+*Identifier
+*Type
