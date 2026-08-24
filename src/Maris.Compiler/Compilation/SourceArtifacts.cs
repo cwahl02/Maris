@@ -5,30 +5,20 @@ using Maris.Core.Text;
 
 namespace Maris.Compiler.Compilation;
 
-public enum CompilationPhase
-{
-    Initial,
-    Lexing,
-    Parsing,
-    Binding
-}
-
-public sealed class CompilationUnit
+public sealed class SourceArtifacts
 {
     public SourceFile SourceFile { get; }
-    public CompilationPhase Phase { get; } = CompilationPhase.Initial;
 
-    public IReadOnlyList<Token>? Tokens { get; }
+    public IReadOnlyList<SyntaxToken>? Tokens { get; }
     public SyntaxNode? SyntaxTree { get; }
     // public BoundNode? BoundTree { get; }
 
     public DiagnosticBag Diagnostics { get; }
     public bool HasErrors => Diagnostics.HasErrors;
-    public CompilationUnit(
+    public SourceArtifacts(
         SourceFile sourceFile,
-        IReadOnlyList<Token>? tokens,
+        IReadOnlyList<SyntaxToken>? tokens,
         SyntaxNode? syntaxTree,
-        // BoundNode? boundTree,
         DiagnosticBag diagnostics
         )
     {
