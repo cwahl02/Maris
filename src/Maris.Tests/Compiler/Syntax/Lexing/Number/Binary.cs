@@ -15,7 +15,7 @@ public class Binary
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "0b1010"));
-        Assert.True(tokens.Contains(TokenKind.IntegerLiteral, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.IntegerLiteral, SyntaxTokenKind.Eof));
     }
 
     [Fact]
@@ -27,7 +27,7 @@ public class Binary
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "0B1010"));
-        Assert.True(tokens.Contains(TokenKind.IntegerLiteral, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.IntegerLiteral, SyntaxTokenKind.Eof));
     }
 
     [Fact]
@@ -39,7 +39,7 @@ public class Binary
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "0b1010_1010"));
-        Assert.True(tokens.Contains(TokenKind.IntegerLiteral, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.IntegerLiteral, SyntaxTokenKind.Eof));
     }
 
     [Fact]
@@ -51,7 +51,7 @@ public class Binary
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "0B1010_1010"));
-        Assert.True(tokens.Contains(TokenKind.IntegerLiteral, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.IntegerLiteral, SyntaxTokenKind.Eof));
     }
 
     [Fact]
@@ -63,7 +63,7 @@ public class Binary
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "0b1010_1010_1010"));
-        Assert.True(tokens.Contains(TokenKind.IntegerLiteral, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.IntegerLiteral, SyntaxTokenKind.Eof));
     }
 
     [Fact]
@@ -75,7 +75,7 @@ public class Binary
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "0B1010_1010_1010"));
-        Assert.True(tokens.Contains(TokenKind.IntegerLiteral, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.IntegerLiteral, SyntaxTokenKind.Eof));
     }
 
     [Fact]
@@ -87,7 +87,7 @@ public class Binary
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "0b00001010"));
-        Assert.True(tokens.Contains(TokenKind.IntegerLiteral, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.IntegerLiteral, SyntaxTokenKind.Eof));
     }
 
     [Fact]
@@ -99,7 +99,7 @@ public class Binary
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "0B00001010"));
-        Assert.True(tokens.Contains(TokenKind.IntegerLiteral, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.IntegerLiteral, SyntaxTokenKind.Eof));
     }
 
     [Fact]
@@ -111,7 +111,7 @@ public class Binary
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "0b10100000"));
-        Assert.True(tokens.Contains(TokenKind.IntegerLiteral, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.IntegerLiteral, SyntaxTokenKind.Eof));
     }
 
     [Fact]
@@ -123,6 +123,6 @@ public class Binary
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "0B10100000"));
-        Assert.True(tokens.Contains(TokenKind.IntegerLiteral, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.IntegerLiteral, SyntaxTokenKind.Eof));
     }
 }

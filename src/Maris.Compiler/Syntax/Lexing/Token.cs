@@ -2,20 +2,20 @@ using Maris.Core.Text;
 
 namespace Maris.Compiler.Syntax.Lexing;
 
-public sealed record Token(
-    TokenKind Kind,
+public sealed record SyntaxToken(
+    SyntaxTokenKind Kind,
     TextSpan Span
 )
 {
-    public static readonly Token Eof = new(TokenKind.Eof, TextSpan.Empty);
-    public Token(TokenKind kind, int start, int length) : this(kind, new TextSpan(start, length)) { }
+    public static readonly SyntaxToken Eof = new(SyntaxTokenKind.Eof, TextSpan.Empty);
+    public SyntaxToken(SyntaxTokenKind kind, int start, int length) : this(kind, new TextSpan(start, length)) { }
 }
 
 public static class TokenListExtensions
 {
     public static bool Compare(
-        this IReadOnlyList<Token> expected,
-        IReadOnlyList<Token> actual
+        this IReadOnlyList<SyntaxToken> expected,
+        IReadOnlyList<SyntaxToken> actual
     )
     {
         if (expected.Count != actual.Count)
@@ -31,17 +31,17 @@ public static class TokenListExtensions
     }
 
     public static bool Contains(
-        this IReadOnlyList<Token> actual,
-         params TokenKind[] kinds)
+        this IReadOnlyList<SyntaxToken> actual,
+         params SyntaxTokenKind[] kinds)
     {
-        HashSet<TokenKind> set = new();
+        HashSet<SyntaxTokenKind> set = new();
 
-        foreach (Token token in actual)
+        foreach (SyntaxToken token in actual)
         {
             set.Add(token.Kind);    
         }
 
-        foreach (TokenKind kind in kinds)
+        foreach (SyntaxTokenKind kind in kinds)
         {
             if (set.Contains(kind))
                 return true;
@@ -51,14 +51,14 @@ public static class TokenListExtensions
     }
 
     public static bool Contains(
-        this IReadOnlyList<Token> actual,
+        this IReadOnlyList<SyntaxToken> actual,
         string sourceText,
         params string[] texts
     )
     {
         HashSet<string> set = new();
 
-        foreach (Token token in actual)
+        foreach (SyntaxToken token in actual)
         {
             set.Add(sourceText.Substring(token.Span.Start, token.Span.Length));    
         }

@@ -23,7 +23,7 @@ public class HelloWorld
         var lexer = new Lexer(sourceFile);
         var tokens = lexer.Lex();
 
-        Assert.True(tokens.Contains(TokenKind.Invalid) == false, "Tokens should not contain any Invalid tokens.");
+        Assert.True(tokens.Contains(SyntaxTokenKind.Invalid) == false, "Tokens should not contain any Invalid tokens.");
         Assert.True(tokens.Contains(text, "import", "std", "io", "main", "print", "return"));
     }
 }

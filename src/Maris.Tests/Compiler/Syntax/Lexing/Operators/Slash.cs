@@ -15,7 +15,7 @@ public class Slash
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "/", "/="));
-        Assert.True(tokens.Contains(TokenKind.Slash, TokenKind.SlashEqual, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.Slash, SyntaxTokenKind.SlashEqual, SyntaxTokenKind.Eof));
     }
 
     [Fact]
@@ -27,6 +27,6 @@ public class Slash
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "/=", "/"));
-        Assert.True(tokens.Contains(TokenKind.SlashEqual, TokenKind.Slash, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.SlashEqual, SyntaxTokenKind.Slash, SyntaxTokenKind.Eof));
     }
 }

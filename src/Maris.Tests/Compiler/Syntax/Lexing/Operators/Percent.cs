@@ -15,7 +15,7 @@ public class Percent
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "%", "%="));
-        Assert.True(tokens.Contains(TokenKind.Percent, TokenKind.PercentEqual, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.Percent, SyntaxTokenKind.PercentEqual, SyntaxTokenKind.Eof));
     }
 
     [Fact]
@@ -27,6 +27,6 @@ public class Percent
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "%", "%=", "%"));
-        Assert.True(tokens.Contains(TokenKind.Percent, TokenKind.PercentEqual, TokenKind.Percent, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.Percent, SyntaxTokenKind.PercentEqual, SyntaxTokenKind.Percent, SyntaxTokenKind.Eof));
     }
 }

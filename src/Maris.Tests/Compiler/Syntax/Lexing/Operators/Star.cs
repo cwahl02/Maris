@@ -15,7 +15,7 @@ public class Star
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "*", "*="));
-        Assert.True(tokens.Contains(TokenKind.Star, TokenKind.StarEqual, TokenKind.Eof)); 
+        Assert.True(tokens.Contains(SyntaxTokenKind.Star, SyntaxTokenKind.StarEqual, SyntaxTokenKind.Eof)); 
     }
 
     [Fact]
@@ -27,6 +27,6 @@ public class Star
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "*", "*=", "*"));
-        Assert.True(tokens.Contains(TokenKind.Star, TokenKind.StarEqual, TokenKind.Star, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.Star, SyntaxTokenKind.StarEqual, SyntaxTokenKind.Star, SyntaxTokenKind.Eof));
     }
 }

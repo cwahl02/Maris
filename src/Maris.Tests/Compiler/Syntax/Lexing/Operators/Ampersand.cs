@@ -15,7 +15,7 @@ public class Ampersand
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "&", "&&", "&="));
-        Assert.True(tokens.Contains(TokenKind.Ampersand, TokenKind.AmpersandAmpersand, TokenKind.AmpersandEqual, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.Ampersand, SyntaxTokenKind.AmpersandAmpersand, SyntaxTokenKind.AmpersandEqual, SyntaxTokenKind.Eof));
     }
 
     [Fact]
@@ -27,6 +27,6 @@ public class Ampersand
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "&&", "&=", "&"));
-        Assert.True(tokens.Contains(TokenKind.AmpersandAmpersand, TokenKind.AmpersandEqual, TokenKind.Ampersand, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.AmpersandAmpersand, SyntaxTokenKind.AmpersandEqual, SyntaxTokenKind.Ampersand, SyntaxTokenKind.Eof));
     }
 }

@@ -14,7 +14,7 @@ public class Minus
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "-", "--", "-="));
-        Assert.True(tokens.Contains(TokenKind.Minus, TokenKind.MinusMinus, TokenKind.MinusEqual, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.Minus, SyntaxTokenKind.MinusMinus, SyntaxTokenKind.MinusEqual, SyntaxTokenKind.Eof));
     }
 
     [Fact]
@@ -26,6 +26,6 @@ public class Minus
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "--", "--", "="));
-        Assert.True(tokens.Contains(TokenKind.MinusMinus, TokenKind.MinusMinus, TokenKind.Equal, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.MinusMinus, SyntaxTokenKind.MinusMinus, SyntaxTokenKind.Equal, SyntaxTokenKind.Eof));
     }
 }

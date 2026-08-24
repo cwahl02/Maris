@@ -83,10 +83,10 @@ public sealed partial class Lexer
         return true;
     }
 
-    private Token LexSingle(TokenKind kind)
+    private SyntaxToken LexSingle(SyntaxTokenKind kind)
     {
         var start = _iterator.Position;
         _iterator.Forward();
-        return new Token(kind, start, 1);
+        return new SyntaxToken(kind, start, 1);
     }
 }

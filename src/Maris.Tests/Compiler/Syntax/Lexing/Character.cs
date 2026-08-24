@@ -11,10 +11,10 @@ public class Character
         var text = "'a'";
         var sourceFile = new SourceFile("", text);
         var lexer = new Lexer(sourceFile);
-        IReadOnlyList<Token> tokens = lexer.Lex();
+        IReadOnlyList<SyntaxToken> tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "'a'"));
-        Assert.True(tokens.Contains(TokenKind.CharacterLiteral, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.CharacterLiteral, SyntaxTokenKind.Eof));
     }
 
     [Fact]
@@ -26,6 +26,6 @@ public class Character
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "'a"));
-        Assert.True(tokens.Contains(TokenKind.Invalid, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.Invalid, SyntaxTokenKind.Eof));
     }
 }

@@ -4,7 +4,7 @@ namespace Maris.Compiler.Syntax.Lexing;
 
 public sealed partial class Lexer
 {
-    private Token LexIdentifier()
+    private SyntaxToken LexIdentifier()
     {
         var start = _iterator.Position;
         while (!_iterator.IsAtEnd && (char.IsAsciiLetterOrDigit(_iterator.Current) || _iterator.Current == '_'))
@@ -13,17 +13,17 @@ public sealed partial class Lexer
         }
         var length = _iterator.Position - start;
         var text = _sourceFile.Text.Substring(start, length);
-        return new Token(IsKeyword(text), start, length);
+        return new SyntaxToken(IsKeyword(text), start, length);
     }
 
-    private static TokenKind IsKeyword(string text)
+    private static SyntaxTokenKind IsKeyword(string text)
     {
         return text switch
         {
-            "import" => TokenKind.Import,
-            "module" => TokenKind.Module,
-            "as" => TokenKind.As,
-            _ => TokenKind.Identifier
+            "import" => SyntaxTokenKind.Import,
+            "module" => SyntaxTokenKind.Module,
+            "as" => SyntaxTokenKind.As,
+            _ => SyntaxTokenKind.Identifier
         };
     }
 }

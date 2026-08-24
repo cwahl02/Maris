@@ -2,7 +2,7 @@ namespace Maris.Compiler.Syntax.Lexing;
 
 public sealed partial class Lexer
 {
-    private Token LexNumber()
+    private SyntaxToken LexNumber()
     {
         var start = _iterator.Position;
         var baseValue = 10; // Default decimal
@@ -31,7 +31,7 @@ public sealed partial class Lexer
                 if (!IsValidDigit(_iterator.Peek(-1), baseValue) || !IsValidDigit(_iterator.Peek(1), baseValue))
                 {
                     // Report Error: Misplaced underscore
-                    return new Token(TokenKind.Invalid, start, _iterator.Position - start);
+                    return new SyntaxToken(SyntaxTokenKind.Invalid, start, _iterator.Position - start);
                 }
                 _iterator.Forward();
             }
@@ -70,12 +70,12 @@ public sealed partial class Lexer
         }
 
         // 3. Determine Token Type
-        var type = (hasDot || hasExponent) ? TokenKind.FloatLiteral : TokenKind.IntegerLiteral;
+        var type = (hasDot || hasExponent) ? SyntaxTokenKind.FloatLiteral : SyntaxTokenKind.IntegerLiteral;
         
         // Optional: Handle Suffixes (e.g., f, L, u) here if needed
         // ScanSuffix(); 
 
-        return new Token(type, start, _iterator.Position - start);
+        return new SyntaxToken(type, start, _iterator.Position - start);
     }
 
     private bool IsValidDigit(char c, int baseValue)

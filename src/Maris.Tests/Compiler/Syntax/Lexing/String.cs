@@ -13,7 +13,7 @@ public class String
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "\"Hello, World!\""));
-        Assert.True(tokens.Contains(TokenKind.StringLiteral, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.StringLiteral, SyntaxTokenKind.Eof));
     }
 
     [Fact]
@@ -25,6 +25,6 @@ public class String
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "\"Hello, World!"));
-        Assert.True(tokens.Contains(TokenKind.Invalid, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.Invalid, SyntaxTokenKind.Eof));
     }
 }

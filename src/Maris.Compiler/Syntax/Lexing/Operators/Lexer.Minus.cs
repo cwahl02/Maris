@@ -2,25 +2,25 @@ namespace Maris.Compiler.Syntax.Lexing;
 
 public sealed partial class Lexer
 {
-    private Token LexMinus()
+    private SyntaxToken LexMinus()
     {
         var start = _iterator.Position;
         if (TryMatch("--"))
         {
-            return new Token(TokenKind.MinusMinus, start, 2);
+            return new SyntaxToken(SyntaxTokenKind.MinusMinus, start, 2);
         }
         else if (TryMatch("->"))
         {
-            return new Token(TokenKind.Arrow, start, 2);
+            return new SyntaxToken(SyntaxTokenKind.Arrow, start, 2);
         }
         else if (TryMatch("-="))
         {
-            return new Token(TokenKind.MinusEqual, start, 2);
+            return new SyntaxToken(SyntaxTokenKind.MinusEqual, start, 2);
         }
         else
         {
             _iterator.Forward();
-            return new Token(TokenKind.Minus, start, 1);
+            return new SyntaxToken(SyntaxTokenKind.Minus, start, 1);
         }
     }
 }

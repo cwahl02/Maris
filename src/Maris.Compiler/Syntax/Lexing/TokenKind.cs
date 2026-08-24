@@ -1,6 +1,6 @@
 namespace Maris.Compiler.Syntax.Lexing;
 
-public enum TokenKind
+public enum SyntaxTokenKind
 {
     Eof,
     Invalid,
@@ -64,14 +64,14 @@ public enum TokenKind
     DotDot,
 
     // Greater
-    Greater,
-    GreaterEqual,
+    GreaterThan,
+    GreaterThanEqual,
     RightShift,
     RightShiftEqual,
 
     // Less
-    Less,
-    LessEqual,
+    LessThan,
+    LessThanEqual,
     LeftShift,
     LeftShiftEqual,
 
@@ -132,6 +132,9 @@ public enum TokenKind
     // Boolean Literals
     True,
     False,
+
+    // Null Literal
+    Null,
 
     // Boolean Operators
     And,

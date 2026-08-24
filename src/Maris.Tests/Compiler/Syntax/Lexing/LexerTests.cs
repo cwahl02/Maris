@@ -5,7 +5,7 @@ namespace Maris.Tests.Compiler.Syntax.Lexing;
 
 public class LexerTests : IDisposable
 {
-    private IReadOnlyList<Token> _tokens;
+    private IReadOnlyList<SyntaxToken> _tokens;
     private ITestOutputHelper _output;
     public LexerTests(ITestOutputHelper output)
     {

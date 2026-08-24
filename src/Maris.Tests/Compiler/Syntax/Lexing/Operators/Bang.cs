@@ -14,7 +14,7 @@ public class Bang
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "!", "!="));
-        Assert.True(tokens.Contains(TokenKind.Bang, TokenKind.BangEqual, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.Bang, SyntaxTokenKind.BangEqual, SyntaxTokenKind.Eof));
     }
 
     [Fact]
@@ -26,6 +26,6 @@ public class Bang
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "!", "!="));
-        Assert.True(tokens.Contains(TokenKind.Bang, TokenKind.BangEqual, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.Bang, SyntaxTokenKind.BangEqual, SyntaxTokenKind.Eof));
     }
 }

@@ -14,7 +14,7 @@ public class Identifier
         var tokens = lexer.Lex();
 
         Assert.True(tokens.Contains(text, "myIdentifier"));
-        Assert.True(tokens.Contains(TokenKind.Identifier, TokenKind.Eof));
+        Assert.True(tokens.Contains(SyntaxTokenKind.Identifier, SyntaxTokenKind.Eof));
     }
 
     [Fact]
@@ -27,19 +27,19 @@ public class Identifier
 
         Assert.True(tokens.Contains(text, "myIdent"));
         Assert.True(tokens.Contains(
-            TokenKind.Identifier,
-            TokenKind.If,
-            TokenKind.Else,
-            TokenKind.While,
-            TokenKind.For,
-            TokenKind.Return,
-            TokenKind.Defer,
-            TokenKind.Continue,
-            TokenKind.Break,
-            TokenKind.Switch,
-            TokenKind.Case,
-            TokenKind.Default,
-            TokenKind.Eof
+            SyntaxTokenKind.Identifier,
+            SyntaxTokenKind.If,
+            SyntaxTokenKind.Else,
+            SyntaxTokenKind.While,
+            SyntaxTokenKind.For,
+            SyntaxTokenKind.Return,
+            SyntaxTokenKind.Defer,
+            SyntaxTokenKind.Continue,
+            SyntaxTokenKind.Break,
+            SyntaxTokenKind.Switch,
+            SyntaxTokenKind.Case,
+            SyntaxTokenKind.Default,
+            SyntaxTokenKind.Eof
         ));
     }
 
@@ -53,23 +53,23 @@ public class Identifier
 
         Assert.True(tokens.Contains(text, "u8", "u16", "u32", "u64", "i8", "i16", "i32", "i64", "f32", "f64", "void", "bool", "string"));
         Assert.True(tokens.Contains(
-            TokenKind.U8,
-            TokenKind.U16,
-            TokenKind.U32,
-            TokenKind.U64,
+            SyntaxTokenKind.U8,
+            SyntaxTokenKind.U16,
+            SyntaxTokenKind.U32,
+            SyntaxTokenKind.U64,
 
-            TokenKind.I8,
-            TokenKind.I16,
-            TokenKind.I32,
-            TokenKind.I64,
+            SyntaxTokenKind.I8,
+            SyntaxTokenKind.I16,
+            SyntaxTokenKind.I32,
+            SyntaxTokenKind.I64,
 
-            TokenKind.F32,
-            TokenKind.F64,
+            SyntaxTokenKind.F32,
+            SyntaxTokenKind.F64,
 
-            TokenKind.Void,
-            TokenKind.Bool,
-            TokenKind.String,
-            TokenKind.Eof
+            SyntaxTokenKind.Void,
+            SyntaxTokenKind.Bool,
+            SyntaxTokenKind.String,
+            SyntaxTokenKind.Eof
         ));
     }
 
@@ -83,12 +83,12 @@ public class Identifier
 
         Assert.True(tokens.Contains(text, "alias", "distinct", "enum", "struct", "union"));
         Assert.True(tokens.Contains(
-            TokenKind.Alias,
-            TokenKind.Distinct,
-            TokenKind.Enum,
-            TokenKind.Struct,
-            TokenKind.Union,
-            TokenKind.Eof
+            SyntaxTokenKind.Alias,
+            SyntaxTokenKind.Distinct,
+            SyntaxTokenKind.Enum,
+            SyntaxTokenKind.Struct,
+            SyntaxTokenKind.Union,
+            SyntaxTokenKind.Eof
         ));
     }
 
@@ -102,18 +102,18 @@ public class Identifier
 
         Assert.True(tokens.Contains(text, "if", "else", "while", "for", "return", "defer", "continue", "break", "switch", "case", "default"));
         Assert.True(tokens.Contains(
-            TokenKind.If,
-            TokenKind.Else,
-            TokenKind.While,
-            TokenKind.For,
-            TokenKind.Return,
-            TokenKind.Defer,
-            TokenKind.Continue,
-            TokenKind.Break,
-            TokenKind.Switch,
-            TokenKind.Case,
-            TokenKind.Default,
-            TokenKind.Eof
+            SyntaxTokenKind.If,
+            SyntaxTokenKind.Else,
+            SyntaxTokenKind.While,
+            SyntaxTokenKind.For,
+            SyntaxTokenKind.Return,
+            SyntaxTokenKind.Defer,
+            SyntaxTokenKind.Continue,
+            SyntaxTokenKind.Break,
+            SyntaxTokenKind.Switch,
+            SyntaxTokenKind.Case,
+            SyntaxTokenKind.Default,
+            SyntaxTokenKind.Eof
         ));
     }
 
@@ -127,10 +127,10 @@ public class Identifier
 
         Assert.True(tokens.Contains(text, "module", "import", "as"));
         Assert.True(tokens.Contains(
-            TokenKind.Module,
-            TokenKind.Import,
-            TokenKind.As,
-            TokenKind.Eof
+            SyntaxTokenKind.Module,
+            SyntaxTokenKind.Import,
+            SyntaxTokenKind.As,
+            SyntaxTokenKind.Eof
         ));
     }
 }

@@ -2,21 +2,21 @@ namespace Maris.Compiler.Syntax.Lexing;
 
 public sealed partial class Lexer
 {
-    private Token LexPlus()
+    private SyntaxToken LexPlus()
     {
         var start = _iterator.Position;
         if (TryMatch("++"))
         {
-            return new Token(TokenKind.PlusPlus, start, 2);
+            return new SyntaxToken(SyntaxTokenKind.PlusPlus, start, 2);
         }
         else if (TryMatch("+="))
         {
-            return new Token(TokenKind.PlusEqual, start, 2);
+            return new SyntaxToken(SyntaxTokenKind.PlusEqual, start, 2);
         }
         else
         {
             _iterator.Forward();
-            return new Token(TokenKind.Plus, start, 1);
+            return new SyntaxToken(SyntaxTokenKind.Plus, start, 1);
         }
     }
 

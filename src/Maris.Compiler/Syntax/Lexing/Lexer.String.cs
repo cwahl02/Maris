@@ -2,10 +2,10 @@ namespace Maris.Compiler.Syntax.Lexing;
 
 public sealed partial class Lexer
 {
-    private Token LexString()
+    private SyntaxToken LexString()
     {
         var start = _iterator.Position;
-        var type = TokenKind.StringLiteral;
+        var type = SyntaxTokenKind.StringLiteral;
         _iterator.Forward(); // Skip the opening quote
 
         while (!_iterator.IsAtEnd && _iterator.Current != '"')
@@ -22,7 +22,7 @@ public sealed partial class Lexer
 
         if (_iterator.IsAtEnd)
         {
-            type = TokenKind.Invalid;
+            type = SyntaxTokenKind.Invalid;
         }
         else
         {
@@ -30,6 +30,6 @@ public sealed partial class Lexer
         }
 
         var length = _iterator.Position - start;
-        return new Token(type, start, length);
+        return new SyntaxToken(type, start, length);
     }
 }

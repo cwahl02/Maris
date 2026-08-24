@@ -14,9 +14,9 @@ public sealed partial class Lexer
         _iterator = new Iterator<char>(sourceFile.Text.ToCharArray());
     }
 
-    public List<Token> Lex()
+    public List<SyntaxToken> Lex()
     {
-        List<Token> tokens = new();
+        List<SyntaxToken> tokens = new();
 
         while (!_iterator.IsAtEnd)
         {
@@ -25,12 +25,12 @@ public sealed partial class Lexer
             tokens.Add(LexToken());
         }
 
-        tokens.Add(Token.Eof);
+        tokens.Add(SyntaxToken.Eof);
 
         return tokens;
     }
 
-    private Token LexToken()
+    private SyntaxToken LexToken()
     {
         if (char.IsAsciiLetter(_iterator.Current) || (_iterator.Current == '_' && char.IsAsciiLetterOrDigit(_iterator.Peek(1))))
         {
@@ -66,17 +66,17 @@ public sealed partial class Lexer
             '/' => LexSlash(),
             '*' => LexStar(),
 
-            '~' => LexSingle(TokenKind.Tilde),
-            ',' => LexSingle(TokenKind.Comma),
-            ';' => LexSingle(TokenKind.Semicolon),
-            '(' => LexSingle(TokenKind.LeftParen),
-            ')' => LexSingle(TokenKind.RightParen),
-            '{' => LexSingle(TokenKind.LeftBrace),
-            '}' => LexSingle(TokenKind.RightBrace),
-            '[' => LexSingle(TokenKind.LeftBracket),
-            ']' => LexSingle(TokenKind.RightBracket),
-            '_' => LexSingle(TokenKind.Underscore),
-            _ => LexSingle(TokenKind.Invalid)
+            '~' => LexSingle(SyntaxTokenKind.Tilde),
+            ',' => LexSingle(SyntaxTokenKind.Comma),
+            ';' => LexSingle(SyntaxTokenKind.Semicolon),
+            '(' => LexSingle(SyntaxTokenKind.LeftParen),
+            ')' => LexSingle(SyntaxTokenKind.RightParen),
+            '{' => LexSingle(SyntaxTokenKind.LeftBrace),
+            '}' => LexSingle(SyntaxTokenKind.RightBrace),
+            '[' => LexSingle(SyntaxTokenKind.LeftBracket),
+            ']' => LexSingle(SyntaxTokenKind.RightBracket),
+            '_' => LexSingle(SyntaxTokenKind.Underscore),
+            _ => LexSingle(SyntaxTokenKind.Invalid)
         };
     }
 }
