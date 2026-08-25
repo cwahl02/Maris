@@ -15,11 +15,11 @@ public class Return
         var tokens = lexer.Lex().ToList();
         var parser = new Parser(tokens);
 
-        var declarations = parser.Parse();
+        var declarations = parser.ParseReturnTest();
 
         Assert.NotNull(declarations);
         
-        var returnStatement = Assert.IsType<ReturnSyntax>(declarations[0]);
+        var returnStatement = Assert.IsType<ReturnSyntax>(declarations);
         Assert.Equal(SyntaxTokenKind.Return, returnStatement.ReturnKeyword.Kind);
 
         var expression = Assert.IsType<ExpressionListSyntax>(returnStatement.Expressions);

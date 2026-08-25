@@ -4,16 +4,17 @@ namespace Maris.Compiler.Syntax.Parsing;
 
 public sealed partial class Parser
 {
-    private ExpressionSyntax ParseEquality()
+    private ExpressionSyntax ParseEqualityExpression()
     {
-        var expr = ParseRelational();
+        ExpressionSyntax expr = ParseRelationalExpression();
 
         while (_iterator.Current.Kind == SyntaxTokenKind.EqualEqual ||
                _iterator.Current.Kind == SyntaxTokenKind.BangEqual)
         {
-            var operatorToken = _iterator.Current;
+            SyntaxToken operatorToken = _iterator.Current;
             _iterator.Forward();
-            var right = ParseRelational();
+            
+            ExpressionSyntax right = ParseRelationalExpression();
             expr = new BinaryExpressionSyntax(expr, operatorToken, right);
         }
         

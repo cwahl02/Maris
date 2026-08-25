@@ -4,16 +4,17 @@ namespace Maris.Compiler.Syntax.Parsing;
 
 public sealed partial class Parser
 {
-    private ExpressionSyntax ParseAdditive()
+    private ExpressionSyntax ParseAdditiveExpression()
     {
-        var expr = ParseMultiplicative();
+        ExpressionSyntax expr = ParseMultiplicativeExpression();
 
         while (_iterator.Current.Kind == SyntaxTokenKind.Plus ||
                _iterator.Current.Kind == SyntaxTokenKind.Minus)
         {
-            var operatorToken = _iterator.Current;
+            SyntaxToken operatorToken = _iterator.Current;
             _iterator.Forward();
-            var right = ParseMultiplicative();
+
+            ExpressionSyntax right = ParseMultiplicativeExpression();
             expr = new BinaryExpressionSyntax(expr, operatorToken, right);
         }
         

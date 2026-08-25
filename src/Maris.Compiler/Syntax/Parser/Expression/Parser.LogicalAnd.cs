@@ -4,15 +4,16 @@ namespace Maris.Compiler.Syntax.Parsing;
 
 public sealed partial class Parser
 {
-    private ExpressionSyntax ParseLogicalAnd()
+    private ExpressionSyntax ParseLogicalAndExpression()
     {
-        var expr = ParseEquality();
+        ExpressionSyntax expr = ParseEqualityExpression();
 
         while (_iterator.Current.Kind == SyntaxTokenKind.AmpersandAmpersand)
         {
-            var operatorToken = _iterator.Current;
+            SyntaxToken operatorToken = _iterator.Current;
             _iterator.Forward();
-            var right = ParseEquality();
+
+            ExpressionSyntax right = ParseEqualityExpression();
             expr = new BinaryExpressionSyntax(expr, operatorToken, right);
         }
         

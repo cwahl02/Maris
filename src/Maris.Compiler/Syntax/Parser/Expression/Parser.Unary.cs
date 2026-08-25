@@ -9,18 +9,22 @@ public sealed record UnaryExpressionSyntax(
 
 public sealed partial class Parser
 {
-    private ExpressionSyntax ParseUnary()
+    private ExpressionSyntax ParseUnaryExpression()
     {
-        if (_iterator.Current.Kind == SyntaxTokenKind.Plus ||
-            _iterator.Current.Kind == SyntaxTokenKind.Minus ||
-            _iterator.Current.Kind == SyntaxTokenKind.Bang)
+        SyntaxTokenKind kind = _iterator.Current.Kind;
+        if (kind == SyntaxTokenKind.Plus ||
+            kind == SyntaxTokenKind.Minus ||
+            kind == SyntaxTokenKind.Star ||
+            kind == SyntaxTokenKind.Ampersand ||
+            kind == SyntaxTokenKind.Bang)
         {
-            var operatorToken = _iterator.Current;
+            SyntaxToken operatorToken = _iterator.Current;
             _iterator.Forward();
-            var operand = ParseUnary();
+
+            ExpressionSyntax operand = ParseUnaryExpression();
             return new UnaryExpressionSyntax(operatorToken, operand);
         }
 
-        return ParsePostfix();
+        return ParsePostfixExpression();
     }
 }

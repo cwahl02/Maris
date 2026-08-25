@@ -8,34 +8,23 @@ public sealed record LiteralExpressionSyntax(
 
 public sealed partial class Parser
 {
-    private ExpressionSyntax ParsePrimary()
+    private ExpressionSyntax ParsePrimaryExpression()
     {
-        if (_iterator.Current.Kind == SyntaxTokenKind.Identifier)
+        SyntaxTokenKind kind = _iterator.Current.Kind;
+        
+        return kind switch
         {
-            return ParseIdentifierPath();
-        }
-
-        if (_iterator.Current.Kind == SyntaxTokenKind.CharacterLiteral ||
-            _iterator.Current.Kind == SyntaxTokenKind.StringLiteral ||
-            _iterator.Current.Kind == SyntaxTokenKind.IntegerLiteral ||
-            _iterator.Current.Kind == SyntaxTokenKind.FloatLiteral ||
-            _iterator.Current.Kind == SyntaxTokenKind.True ||
-            _iterator.Current.Kind == SyntaxTokenKind.False ||
-            _iterator.Current.Kind == SyntaxTokenKind.Null)
-        {
-            var literalToken = _iterator.Current;
-            _iterator.Forward();
-            return new LiteralExpressionSyntax(literalToken);
-        }
-
-        if (_iterator.Current.Kind == SyntaxTokenKind.LeftParen)
-        {
-            _iterator.Forward();
-            var expr = ParseExpression();
-            Expect(SyntaxTokenKind.RightParen);
-            return new GroupExpressionSyntax(expr);
-        }
-
-        throw new Exception($"Expected expression, found {_iterator.Current.Kind}.");
+            SyntaxTokenKind.Identifier => ParseIdentifierExpression(),
+            SyntaxTokenKind.CharacterLiteral => ParseLiteralExpression(),
+            SyntaxTokenKind.StringLiteral => ParseLiteralExpression(),
+            SyntaxTokenKind.IntegerLiteral => ParseLiteralExpression(),
+            SyntaxTokenKind.FloatLiteral => ParseLiteralExpression(),
+            SyntaxTokenKind.True => ParseLiteralExpression(),
+            SyntaxTokenKind.False => ParseLiteralExpression(),
+            SyntaxTokenKind.Null => ParseLiteralExpression(),
+            SyntaxTokenKind.LeftParen => ParseGroupExpression(),
+            SyntaxTokenKind.LeftBrace => ParseInitializerExpression(),
+            _ => throw new Exception($"Expected expression, found {kind}.")
+        };
     }
 }

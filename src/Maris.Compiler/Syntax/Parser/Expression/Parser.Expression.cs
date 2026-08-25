@@ -12,6 +12,6 @@ public sealed partial class Parser
 {
     private ExpressionSyntax ParseExpression()
     {
-        return ParseLogicalOr();
+        return ParseAssignmentExpression();
     }
 }

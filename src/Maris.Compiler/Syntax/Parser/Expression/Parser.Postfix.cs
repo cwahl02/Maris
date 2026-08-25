@@ -24,42 +24,29 @@ public sealed record IndexExpressionSyntax(
 
 public sealed partial class Parser
 {
-    private ExpressionSyntax ParsePostfix()
+    private ExpressionSyntax ParsePostfixExpression()
     {
-        var expr = ParsePrimary();
+        ExpressionSyntax expr = ParsePrimaryExpression();
 
         while (true)
         {
-            if (_iterator.Current.Kind == SyntaxTokenKind.LeftParen)
+            switch (_iterator.Current.Kind)
             {
-                var openParenToken = _iterator.Current;
-                var arguments = ParseExpressionList();
-                var closeParenToken = Expect(SyntaxTokenKind.RightParen);
-                expr = new CallExpressionSyntax(expr, openParenToken, arguments, closeParenToken);
-                continue;
-            }
-            else if (_iterator.Current.Kind == SyntaxTokenKind.Dot)
-            {
-                var dotToken = _iterator.Current;
-                _iterator.Forward();
-                var identifierToken = Expect(SyntaxTokenKind.Identifier);
-                expr = new MemberAccessExpressionSyntax(expr, dotToken, identifierToken);
-                continue;
-            }
-            
-            if (_iterator.Current.Kind == SyntaxTokenKind.LeftBracket)
-            {
-                var leftBracket = _iterator.Current;
-                _iterator.Forward();
-                var index = ParseExpression();
-                var rightBracket = Expect(SyntaxTokenKind.RightBracket);
-                expr = new IndexExpressionSyntax(leftBracket, expr, index, rightBracket);
-                continue;
-            }
+                case SyntaxTokenKind.LeftParen:
+                    expr = ParseCallExpression(expr);
+                    break;
 
-            break;
+                case SyntaxTokenKind.Dot:
+                    expr = ParseMemberAccessExpression(expr);
+                    break;
+
+                case SyntaxTokenKind.LeftBracket:
+                    expr = ParseIndexExpression(expr);
+                    break;
+
+                default:
+                    return expr;
+            }
         }
-        
-        return expr;
     }
 }

@@ -11,7 +11,7 @@ public sealed partial class Parser
 {
     private ExpressionSyntax ParseCall()
     {
-        var expr = ParsePostfix();
+        var expr = ParsePostfixExpression();
 
         while (_iterator.Current.Kind == SyntaxTokenKind.LeftParen)
         {
