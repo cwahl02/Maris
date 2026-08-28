@@ -19,18 +19,18 @@ public class Module
 
         Assert.NotNull(declarations);
         
-        var module = Assert.IsType<ModuleSyntax>(declarations[0]);
+        var module = Assert.IsType<ModuleDeclaration>(declarations[0]);
         Assert.Equal(SyntaxTokenKind.Module, module.ModuleKeyword.Kind);
 
-        var path = Assert.IsType<IdentifierPathSyntax>(module.Path);
-        Assert.Single(path.Identifiers);
-        Assert.Equal("TestModule", text.Substring(path.Identifiers[0].Span.Start, path.Identifiers[0].Span.Length));
+        var path = Assert.IsType<SeparatedSyntax<TokenSyntax>>(module.Path);
+        Assert.Single(path.Elements);
+        Assert.Equal("TestModule", text.Substring(path.Elements[0].Token.Span.Start, path.Elements[0].Token.Span.Length));
     }
 
     [Fact]
     public void Parse_ModuleDeclaration_Block()
     {
-        var text = "module TestModule {}";
+        var text = "module TestModule { }";
         var sourceFile = new SourceFile("TestModule.maris", text);
         var lexer = new Lexer(sourceFile);
         var tokens = lexer.Lex().ToList();
@@ -40,11 +40,36 @@ public class Module
 
         Assert.NotNull(declarations);
         
-        var module = Assert.IsType<ModuleSyntax>(declarations[0]);
+        var module = Assert.IsType<ModuleDeclaration>(declarations[0]);
         Assert.Equal(SyntaxTokenKind.Module, module.ModuleKeyword.Kind);
 
-        var path = Assert.IsType<IdentifierPathSyntax>(module.Path);
-        Assert.Single(path.Identifiers);
-        Assert.Equal("TestModule", text.Substring(path.Identifiers[0].Span.Start, path.Identifiers[0].Span.Length));
+        var path = Assert.IsType<SeparatedSyntax<TokenSyntax>>(module.Path);
+        Assert.Single(path.Elements);
+        Assert.Equal("TestModule", text.Substring(path.Elements[0].Token.Span.Start, path.Elements[0].Token.Span.Length));
+    }
+
+    [Fact]
+    public void Parse_ModuleDeclaration_Block_WithStatements()
+    {
+        var text = "module TestModule { return; }";
+        var sourceFile = new SourceFile("TestModule.maris", text);
+        var lexer = new Lexer(sourceFile);
+        var tokens = lexer.Lex().ToList();
+        var parser = new Parser(tokens);
+
+        var declarations = parser.Parse();
+
+        Assert.NotNull(declarations);
+        
+        var module = Assert.IsType<ModuleDeclaration>(declarations[0]);
+        Assert.Equal(SyntaxTokenKind.Module, module.ModuleKeyword.Kind);
+
+        var path = Assert.IsType<SeparatedSyntax<TokenSyntax>>(module.Path);
+        Assert.Single(path.Elements);
+        Assert.Equal("TestModule", text.Substring(path.Elements[0].Token.Span.Start, path.Elements[0].Token.Span.Length));
+
+        var body = Assert.IsType<BlockSyntax>(module.Body);
+        Assert.NotNull(body);
+        Assert.Single(body.Statements);
     }
 }
