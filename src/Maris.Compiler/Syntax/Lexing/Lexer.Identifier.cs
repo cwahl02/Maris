@@ -23,6 +23,21 @@ public sealed partial class Lexer
             "import" => SyntaxTokenKind.Import,
             "module" => SyntaxTokenKind.Module,
             "as" => SyntaxTokenKind.As,
+            "return" => SyntaxTokenKind.Return,
+            "if" => SyntaxTokenKind.If,
+            "else" => SyntaxTokenKind.Else,
+            "while" => SyntaxTokenKind.While,
+            "for" => SyntaxTokenKind.For,
+            "switch" => SyntaxTokenKind.Switch,
+            "case" => SyntaxTokenKind.Case,
+            "default" => SyntaxTokenKind.Default,
+            "break" => SyntaxTokenKind.Break,
+            "continue" => SyntaxTokenKind.Continue,
+            "alias" => SyntaxTokenKind.Alias,
+            "distinct" => SyntaxTokenKind.Distinct,
+            "enum" => SyntaxTokenKind.Enum,
+            "struct" => SyntaxTokenKind.Struct,
+            "union" => SyntaxTokenKind.Union,
             _ => SyntaxTokenKind.Identifier
         };
     }
