@@ -1,4 +1,3 @@
-using Maris.Core.Iterator;
 using Maris.Core.Text;
 
 namespace Maris.Compiler.Syntax.Lexing;
@@ -6,21 +5,27 @@ namespace Maris.Compiler.Syntax.Lexing;
 public sealed partial class Lexer
 {
     private readonly SourceFile _sourceFile;
-    private readonly Iterator<char> _iterator;
+    private readonly string _text;
+    private int _position;
 
     public Lexer(SourceFile sourceFile)
     {
         _sourceFile = sourceFile;
-        _iterator = new Iterator<char>(sourceFile.Text.ToCharArray());
+        _text = sourceFile.Text;
     }
 
     public List<SyntaxToken> Lex()
     {
         List<SyntaxToken> tokens = new();
 
-        while (!_iterator.IsAtEnd)
+        while (!IsAtEnd)
         {
             SkipTrivia();
+
+            if (IsAtEnd)
+            {
+                break;
+            }
 
             tokens.Add(LexToken());
         }
@@ -30,26 +35,74 @@ public sealed partial class Lexer
         return tokens;
     }
 
+    // ==================== Core Combinators ====================
+
+    private bool IsAtEnd => _position >= _text.Length;
+
+    private char Current => Peek(0);
+
+    private char Peek(int offset)
+    {
+        int index = _position + offset;
+        return index >= 0 && index < _text.Length ? _text[index] : '\0';
+    }
+
+    private bool Check(char c) => Current == c;
+
+    private bool Check(string text)
+    {
+        for (int i = 0; i < text.Length; i++)
+        {
+            if (Peek(i) != text[i])
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void Advance() => Advance(1);
+
+    private void Advance(int count)
+    {
+        for (int i = 0; i < count && !IsAtEnd; i++)
+        {
+            _position++;
+        }
+    }
+
+    private bool Match(string text)
+    {
+        if (!Check(text))
+        {
+            return false;
+        }
+
+        Advance(text.Length);
+        return true;
+    }
+
     private SyntaxToken LexToken()
     {
-        if (char.IsAsciiLetter(_iterator.Current) || (_iterator.Current == '_' && char.IsAsciiLetterOrDigit(_iterator.Peek(1))))
+        if (char.IsAsciiLetter(Current) || (Current == '_' && char.IsAsciiLetterOrDigit(Peek(1))))
         {
             return LexIdentifier();
         }
-        else if (char.IsDigit(_iterator.Current))
+        else if (char.IsDigit(Current))
         {
             return LexNumber();
         }
-        else if (_iterator.Current == '"')
+        else if (Current == '"')
         {
             return LexString();
         }
-        else if (_iterator.Current == '\'')
+        else if (Current == '\'')
         {
             return LexCharacter();
         }
-        
-        return _iterator.Current switch
+
+        return Current switch
         {
             '&' => LexAmpersand(),
             '!' => LexBang(),

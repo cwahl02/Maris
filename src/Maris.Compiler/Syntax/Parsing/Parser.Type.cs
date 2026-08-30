@@ -30,6 +30,7 @@ public sealed record SliceType(
 
 public sealed record ArrayType(
     SyntaxToken LeftBracket,
+    SyntaxToken Size,
     SyntaxToken RightBracket,
     TypeSyntax ElementType
 ) : TypeSyntax;
@@ -48,6 +49,7 @@ public sealed record FunctionType(
 
 public sealed partial class Parser
 {
+    // Type := (Identifier | <builtin keyword> | '[]' | '[' IntegerLiteral ']' | '*' | '&') Type?
     private TypeSyntax ParseType()
     {
         return Current.Kind switch
@@ -75,13 +77,13 @@ public sealed partial class Parser
             SyntaxTokenKind.Identifier =>
                     ParseNamedType(),
 
-            _ => throw new Exception($"Unexpected token: {Current.Kind}")
+            _ => throw new ParseException($"Expected type, but got {Current.Kind} at position {Current.Span.Start}")
         };
     }
 
     private BuiltinType ParseBuiltinType()
     {
-        SyntaxToken keyword = Expect(Current.Kind);
+        SyntaxToken keyword = Advance();
         return new BuiltinType(keyword);
     }
 
@@ -105,33 +107,29 @@ public sealed partial class Parser
         return new ReferenceType(ampersand, elementType);
     }
 
-    private SliceType ParseSliceType()
+    // SliceType := '[' ']' Type
+    private SliceType ParseSliceType(SyntaxToken leftBracket)
     {
-        SyntaxToken leftBracket = Expect(SyntaxTokenKind.LeftBracket);
         SyntaxToken rightBracket = Expect(SyntaxTokenKind.RightBracket);
         TypeSyntax elementType = ParseType();
         return new SliceType(leftBracket, rightBracket, elementType);
     }
 
-    private ArrayType ParseArrayType()
+    // ArrayType := '[' IntegerLiteral ']' Type
+    private ArrayType ParseArrayType(SyntaxToken leftBracket)
     {
-        SyntaxToken leftBracket = Expect(SyntaxTokenKind.LeftBracket);
+        SyntaxToken size = Expect(SyntaxTokenKind.IntegerLiteral);
         SyntaxToken rightBracket = Expect(SyntaxTokenKind.RightBracket);
         TypeSyntax elementType = ParseType();
-        return new ArrayType(leftBracket, rightBracket, elementType);
+        return new ArrayType(leftBracket, size, rightBracket, elementType);
     }
 
     private TypeSyntax ParseSliceOrArrayType()
     {
         SyntaxToken leftBracket = Expect(SyntaxTokenKind.LeftBracket);
-        if (Current.Kind == SyntaxTokenKind.RightBracket)
-        {
-            return ParseSliceType();
-        }
-        else
-        {
-            return ParseArrayType();
-        }
+        return Check(SyntaxTokenKind.RightBracket)
+            ? ParseSliceType(leftBracket)
+            : ParseArrayType(leftBracket);
     }
 
     private FunctionType ParseFunctionType()
@@ -140,7 +138,7 @@ public sealed partial class Parser
         SeparatedSyntax<TypeSyntax> parameters = ParseSeparated(ParseType, SyntaxTokenKind.Comma);
         SyntaxToken rightParen = Expect(SyntaxTokenKind.RightParen);
 
-        SyntaxToken? arrow = Match(SyntaxTokenKind.Arrow) ? Expect(SyntaxTokenKind.Arrow) : null;
+        SyntaxToken? arrow = Match(SyntaxTokenKind.Arrow) ? Previous : null;
         SeparatedSyntax<TypeSyntax>? returnTypes = arrow != null ? ParseSeparated(ParseType, SyntaxTokenKind.Comma) : null;
 
         SyntaxToken leftBrace = Expect(SyntaxTokenKind.LeftBrace);

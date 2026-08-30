@@ -19,7 +19,7 @@ public sealed partial class Parser
         SeparatedSyntax<TokenSyntax> path = ParseSeparated(() => ParseToken(SyntaxTokenKind.Identifier), SyntaxTokenKind.Dot);
 
         BlockSyntax? body = null;
-        if (Match(SyntaxTokenKind.LeftBrace))
+        if (Check(SyntaxTokenKind.LeftBrace))
         {
             body = ParseBlock();
 

@@ -4,11 +4,11 @@ public sealed partial class Lexer
 {
     private void SkipTrivia()
     {
-        while (!_iterator.IsAtEnd)
+        while (!IsAtEnd)
         {
-            if (char.IsWhiteSpace(_iterator.Current))
+            if (char.IsWhiteSpace(Current))
             {
-                _iterator.Forward();
+                Advance();
                 continue;
             }
 
@@ -28,14 +28,14 @@ public sealed partial class Lexer
 
     private bool TrySkipLineComment()
     {
-        if (_iterator.Current != '/' || _iterator.Peek(1) != '/')
+        if (!Check("//"))
             return false;
 
-        _iterator.Forward(2); // Skip the '//' characters
+        Advance(2); // Skip the '//' characters
 
-        while (!_iterator.IsAtEnd && _iterator.Current != '\n')
+        while (!IsAtEnd && Current != '\n')
         {
-            _iterator.Forward();
+            Advance();
         }
 
         return true;
@@ -43,50 +43,38 @@ public sealed partial class Lexer
 
     private bool TrySkipBlockComment()
     {
-        if (_iterator.Current != '/' || _iterator.Peek(1) != '*')
+        if (!Check("/*"))
             return false;
 
-        _iterator.Forward(2); // Skip the '/*' characters
+        Advance(2); // Skip the '/*' characters
 
         int depth = 1; // Track the depth of nested block comments
 
-        while (!_iterator.IsAtEnd && depth > 0)
+        while (!IsAtEnd && depth > 0)
         {
-            if (_iterator.Current == '/' && _iterator.Peek(1) == '*')
+            if (Check("/*"))
             {
                 depth++;
-                _iterator.Forward(2); // Skip the '/*' characters
+                Advance(2); // Skip the '/*' characters
             }
-            else if (_iterator.Current == '*' && _iterator.Peek(1) == '/')
+            else if (Check("*/"))
             {
                 depth--;
-                _iterator.Forward(2); // Skip the '*/' characters
+                Advance(2); // Skip the '*/' characters
             }
             else
             {
-                _iterator.Forward();
+                Advance();
             }
         }
 
-        return true;
-    }
-
-    private bool TryMatch(string expected)
-    {
-        for (int i = 0; i < expected.Length; i++)
-        {
-            if (_iterator.Peek(i) != expected[i])
-                return false;
-        }
-
-        _iterator.Forward(expected.Length);
         return true;
     }
 
     private SyntaxToken LexSingle(SyntaxTokenKind kind)
     {
-        var start = _iterator.Position;
-        _iterator.Forward();
+        var start = _position;
+        Advance();
         return new SyntaxToken(kind, start, 1);
     }
 }

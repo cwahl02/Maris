@@ -13,6 +13,7 @@ public sealed partial class Parser
             // Declarations
             SyntaxTokenKind.Module => ParseModuleDeclaration(accessibility),
             SyntaxTokenKind.Import => ParseImportDeclaration(accessibility),
+            SyntaxTokenKind.Identifier when IsNamedDeclarationStart() => ParseNamedDeclaration(accessibility),
 
             // Control flow
             SyntaxTokenKind.If => ParseIfStatement(),
@@ -22,10 +23,18 @@ public sealed partial class Parser
             SyntaxTokenKind.Break => ParseBreakStatement(),
             SyntaxTokenKind.Continue => ParseContinueStatement(),
 
-            //SyntaxTokenKind.LeftBrace => ParseBlock(),
+            SyntaxTokenKind.LeftBrace => ParseBlock(),
 
             // Expressions
             _ => ParseExpressionStatement()
         };
     }
+
+    // An identifier starts a named declaration when it is directly followed by a
+    // binding token (':', '::', ':=' or '::='); otherwise it is an expression.
+    private bool IsNamedDeclarationStart() => Peek(1).Kind is
+        SyntaxTokenKind.Colon or
+        SyntaxTokenKind.ColonColon or
+        SyntaxTokenKind.ColonEqual or
+        SyntaxTokenKind.ColonColonEqual;
 }

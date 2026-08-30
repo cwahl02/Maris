@@ -6,30 +6,30 @@ public sealed record AliasDeclaration(
     TokenSyntax Name,
     SyntaxToken ColonColon,
     SyntaxToken AliasKeyword,
-    SyntaxNode? Type,
-    SyntaxToken? AsKeyword,
-    TokenSyntax? Alias,
+    TypeSyntax Type,
+    SyntaxToken Semicolon,
     DeclarationAccessibility Accessibility = DeclarationAccessibility.Public
 ) : DeclarationSyntax(Accessibility);
 
 public sealed partial class Parser
 {
+    // AliasDeclaration := Identifier '::' 'alias' Type ';'
     private AliasDeclaration ParseAliasDeclaration(
         DeclarationAccessibility accessibility
     )
     {
+        TokenSyntax name = ParseToken(SyntaxTokenKind.Identifier);
+        SyntaxToken colonColon = Expect(SyntaxTokenKind.ColonColon);
         SyntaxToken aliasKeyword = Expect(SyntaxTokenKind.Alias);
-        TokenSyntax identifier = ParseToken(SyntaxTokenKind.Identifier);
-        SyntaxToken? asKeyword = Match(SyntaxTokenKind.As) ? Expect(SyntaxTokenKind.As) : null;
-        TokenSyntax? alias = asKeyword != null ? ParseToken(SyntaxTokenKind.Identifier) : null;
+        TypeSyntax type = ParseType();
+        SyntaxToken semicolon = Expect(SyntaxTokenKind.Semicolon);
 
         return new AliasDeclaration(
-            identifier,
-            Expect(SyntaxTokenKind.ColonColon),
+            name,
+            colonColon,
             aliasKeyword,
-            null,
-            asKeyword,
-            alias,
+            type,
+            semicolon,
             accessibility
         );
     }

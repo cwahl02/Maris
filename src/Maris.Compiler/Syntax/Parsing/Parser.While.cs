@@ -5,7 +5,7 @@ namespace Maris.Compiler.Syntax.Parsing;
 public sealed record WhileStatement(
     SyntaxToken WhileKeyword,
     ExpressionSyntax Condition,
-    BlockSyntax Body
+    StatementSyntax Body
 ) : StatementSyntax;
 
 public sealed partial class Parser
@@ -14,7 +14,7 @@ public sealed partial class Parser
     {
         SyntaxToken whileKeyword = Expect(SyntaxTokenKind.While);
         ExpressionSyntax condition = ParseExpression();
-        BlockSyntax body = ParseBlock();
+        StatementSyntax body = ParseControlBody();
 
         return new WhileStatement(
             whileKeyword,

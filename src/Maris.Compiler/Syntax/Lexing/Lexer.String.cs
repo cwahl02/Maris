@@ -4,32 +4,32 @@ public sealed partial class Lexer
 {
     private SyntaxToken LexString()
     {
-        var start = _iterator.Position;
+        var start = _position;
         var type = SyntaxTokenKind.StringLiteral;
-        _iterator.Forward(); // Skip the opening quote
+        Advance(); // Skip the opening quote
 
-        while (!_iterator.IsAtEnd && _iterator.Current != '"')
+        while (!IsAtEnd && Current != '"')
         {
-            if (_iterator.Current == '\\' && _iterator.Peek(1) == '"')
+            if (Current == '\\' && Peek(1) == '"')
             {
-                _iterator.Forward(2); // Skip the escaped quote
+                Advance(2); // Skip the escaped quote
             }
             else
             {
-                _iterator.Forward();
+                Advance();
             }
         }
 
-        if (_iterator.IsAtEnd)
+        if (IsAtEnd)
         {
             type = SyntaxTokenKind.Invalid;
         }
         else
         {
-            _iterator.Forward(); // Skip the closing quote
+            Advance(); // Skip the closing quote
         }
 
-        var length = _iterator.Position - start;
+        var length = _position - start;
         return new SyntaxToken(type, start, length);
     }
 }

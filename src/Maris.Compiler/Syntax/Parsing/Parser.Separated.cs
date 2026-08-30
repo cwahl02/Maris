@@ -18,11 +18,7 @@ public sealed partial class Parser
         while (true)
         {
             elements.Add(parseElement());
-            if (Match(separator))
-            {
-                Forward();
-            }
-            else
+            if (!Match(separator))
             {
                 break;
             }

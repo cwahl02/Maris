@@ -3,7 +3,8 @@ using Maris.Compiler.Syntax.Lexing;
 namespace Maris.Compiler.Syntax.Parsing;
 
 public sealed record ExpressionStatement(
-    SeparatedSyntax<ExpressionSyntax> Expressions
+    SeparatedSyntax<ExpressionSyntax> Expressions,
+    SyntaxToken Semicolon
 ) : StatementSyntax;
 
 public sealed record AssignmentExpression(
@@ -23,27 +24,28 @@ public sealed partial class Parser
     private ExpressionStatement ParseExpressionStatement()
     {
         SeparatedSyntax<ExpressionSyntax> expressions = ParseSeparated(ParseExpression, SyntaxTokenKind.Comma);
+        SyntaxToken semicolon = Expect(SyntaxTokenKind.Semicolon);
 
         return new ExpressionStatement(
-            expressions
+            expressions,
+            semicolon
         );
     }
 
-    private ExpressionSyntax ParseExpression()
-    {
-        return ParseAssignmentExpression();
-    }
+    // ==================== Precedence Climbing ====================
+
+    private ExpressionSyntax ParseExpression() => ParseAssignmentExpression();
 
     private ExpressionSyntax ParseAssignmentExpression()
     {
         ExpressionSyntax left = ParseLogicalOrExpression();
-        
+
         if (!Match(SyntaxTokenKind.Equal))
         {
             return left;
         }
 
-        SyntaxToken equalToken = Expect(SyntaxTokenKind.Equal);
+        SyntaxToken equalToken = Previous;
         ExpressionSyntax right = ParseAssignmentExpression();
 
         return new AssignmentExpression(
@@ -57,58 +59,57 @@ public sealed partial class Parser
     {
         ExpressionSyntax left = ParseLogicalAndExpression();
 
-        if (!Match(SyntaxTokenKind.Or))
+        while (Match(SyntaxTokenKind.Or))
         {
-            return left;
+            SyntaxToken orToken = Previous;
+            ExpressionSyntax right = ParseLogicalAndExpression();
+
+            left = new BinaryExpression(
+                left,
+                orToken,
+                right
+            );
         }
 
-        SyntaxToken orToken = Expect(SyntaxTokenKind.Or);
-        ExpressionSyntax right = ParseLogicalOrExpression();
-
-        return new BinaryExpression(
-            left,
-            orToken,
-            right
-        );
+        return left;
     }
 
     private ExpressionSyntax ParseLogicalAndExpression()
     {
         ExpressionSyntax left = ParseEqualityExpression();
 
-        if (!Match(SyntaxTokenKind.And))
+        while (Match(SyntaxTokenKind.And))
         {
-            return left;
+            SyntaxToken andToken = Previous;
+            ExpressionSyntax right = ParseEqualityExpression();
+
+            left = new BinaryExpression(
+                left,
+                andToken,
+                right
+            );
         }
 
-        SyntaxToken andToken = Expect(SyntaxTokenKind.And);
-        ExpressionSyntax right = ParseLogicalAndExpression();
-
-        return new BinaryExpression(
-            left,
-            andToken,
-            right
-        );
+        return left;
     }
 
     private ExpressionSyntax ParseEqualityExpression()
     {
         ExpressionSyntax left = ParseComparisonExpression();
 
-        if (!Match(SyntaxTokenKind.EqualEqual, SyntaxTokenKind.BangEqual))
+        while (Match(SyntaxTokenKind.EqualEqual, SyntaxTokenKind.BangEqual))
         {
-            return left;
-        }
-    
-        SyntaxToken operatorToken = Expect(SyntaxTokenKind.EqualEqual, SyntaxTokenKind.BangEqual);
-        
-        ExpressionSyntax right = ParseComparisonExpression();
+            SyntaxToken operatorToken = Previous;
+            ExpressionSyntax right = ParseComparisonExpression();
 
-        return new BinaryExpression(
-            left,
-            operatorToken,
-            right
-        );
+            left = new BinaryExpression(
+                left,
+                operatorToken,
+                right
+            );
+        }
+
+        return left;
     }
 
     private ExpressionSyntax ParseComparisonExpression()
@@ -121,12 +122,7 @@ public sealed partial class Parser
             SyntaxTokenKind.GreaterThan,
             SyntaxTokenKind.GreaterThanEqual))
         {
-            SyntaxToken operatorToken = Expect(
-                SyntaxTokenKind.LessThan,
-                SyntaxTokenKind.LessThanEqual,
-                SyntaxTokenKind.GreaterThan,
-                SyntaxTokenKind.GreaterThanEqual);
-
+            SyntaxToken operatorToken = Previous;
             ExpressionSyntax right = ParseTermExpression();
 
             left = new BinaryExpression(
@@ -141,13 +137,11 @@ public sealed partial class Parser
 
     private ExpressionSyntax ParseTermExpression()
     {
-        Console.WriteLine($"Term: {Current.Kind}");
-
         ExpressionSyntax left = ParseFactorExpression();
 
         while (Match(SyntaxTokenKind.Plus, SyntaxTokenKind.Minus))
         {
-            SyntaxToken operatorToken = Expect(SyntaxTokenKind.Plus, SyntaxTokenKind.Minus);
+            SyntaxToken operatorToken = Previous;
             ExpressionSyntax right = ParseFactorExpression();
 
             left = new BinaryExpression(
@@ -162,14 +156,12 @@ public sealed partial class Parser
 
     private ExpressionSyntax ParseFactorExpression()
     {
-        Console.WriteLine($"Factor: {Current.Kind}");
-
-        ExpressionSyntax left = ParsePrimaryExpression();
+        ExpressionSyntax left = ParseUnaryExpression();
 
         while (Match(SyntaxTokenKind.Star, SyntaxTokenKind.Slash, SyntaxTokenKind.Percent))
         {
-            SyntaxToken operatorToken = Expect(SyntaxTokenKind.Star, SyntaxTokenKind.Slash, SyntaxTokenKind.Percent);
-            ExpressionSyntax right = ParsePrimaryExpression();
+            SyntaxToken operatorToken = Previous;
+            ExpressionSyntax right = ParseUnaryExpression();
 
             left = new BinaryExpression(
                 left,
@@ -181,23 +173,34 @@ public sealed partial class Parser
         return left;
     }
 
+    private ExpressionSyntax ParseUnaryExpression()
+    {
+        if (Match(SyntaxTokenKind.Bang, SyntaxTokenKind.Minus, SyntaxTokenKind.Ampersand, SyntaxTokenKind.Star))
+        {
+            SyntaxToken operatorToken = Previous;
+            ExpressionSyntax operand = ParseUnaryExpression();
+            return new UnaryExpression(operatorToken, operand);
+        }
+
+        return ParsePrimaryExpression();
+    }
+
     private ExpressionSyntax ParsePrimaryExpression()
     {
-        Console.WriteLine($"Primary: {Current.Kind}");
-
         return Current.Kind switch
         {
             SyntaxTokenKind.Identifier => ParseIdentifierExpression(),
+            SyntaxTokenKind.CharacterLiteral => ParseLiteralExpression(),
             SyntaxTokenKind.StringLiteral => ParseLiteralExpression(),
             SyntaxTokenKind.IntegerLiteral => ParseLiteralExpression(),
             SyntaxTokenKind.FloatLiteral => ParseLiteralExpression(),
             SyntaxTokenKind.True => ParseLiteralExpression(),
             SyntaxTokenKind.False => ParseLiteralExpression(),
             SyntaxTokenKind.LeftParen => ParseParenthesizedExpression(),
-            _ => throw new Exception($"Expected expression, but got {Current.Kind} at position {Current.Span.Start}")
+            _ => throw new ParseException($"Expected expression, but got {Current.Kind} at position {Current.Span.Start}")
         };
     }
-    
+
     private ExpressionSyntax ParseIdentifierExpression()
     {
         SeparatedSyntax<TokenSyntax> identifierTokens = ParseSeparated(() => ParseToken(SyntaxTokenKind.Identifier), SyntaxTokenKind.Dot);
@@ -215,6 +218,7 @@ public sealed partial class Parser
             SyntaxTokenKind.False);
         return new LiteralExpression(literalToken);
     }
+
     private ParenthesizedExpression ParseParenthesizedExpression()
     {
         SyntaxToken leftParen = Expect(SyntaxTokenKind.LeftParen);
@@ -223,6 +227,11 @@ public sealed partial class Parser
         return new ParenthesizedExpression(leftParen, expression, rightParen);
     }
 }
+
+public sealed record UnaryExpression(
+    SyntaxToken OperatorToken,
+    ExpressionSyntax Operand
+) : ExpressionSyntax;
 
 public sealed record LiteralExpression(
     SyntaxToken LiteralToken

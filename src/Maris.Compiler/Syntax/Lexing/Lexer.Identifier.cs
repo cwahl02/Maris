@@ -6,12 +6,12 @@ public sealed partial class Lexer
 {
     private SyntaxToken LexIdentifier()
     {
-        var start = _iterator.Position;
-        while (!_iterator.IsAtEnd && (char.IsAsciiLetterOrDigit(_iterator.Current) || _iterator.Current == '_'))
+        var start = _position;
+        while (!IsAtEnd && (char.IsAsciiLetterOrDigit(Current) || Current == '_'))
         {
-            _iterator.Forward();
+            Advance();
         }
-        var length = _iterator.Position - start;
+        var length = _position - start;
         var text = _sourceFile.Text.Substring(start, length);
         return new SyntaxToken(IsKeyword(text), start, length);
     }

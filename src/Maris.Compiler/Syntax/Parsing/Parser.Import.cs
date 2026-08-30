@@ -18,7 +18,7 @@ public sealed partial class Parser
     {
         SyntaxToken importKeyword = Expect(SyntaxTokenKind.Import);
         SeparatedSyntax<TokenSyntax> path = ParseSeparated(() => ParseToken(SyntaxTokenKind.Identifier), SyntaxTokenKind.Dot);
-        SyntaxToken? asKeyword = Match(SyntaxTokenKind.As) ? Expect(SyntaxTokenKind.As) : null;
+        SyntaxToken? asKeyword = Match(SyntaxTokenKind.As) ? Previous : null;
         TokenSyntax? alias = asKeyword != null ? ParseToken(SyntaxTokenKind.Identifier) : null;
 
         Expect(SyntaxTokenKind.Semicolon);

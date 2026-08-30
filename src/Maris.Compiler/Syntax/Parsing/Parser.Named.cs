@@ -4,21 +4,28 @@ namespace Maris.Compiler.Syntax.Parsing;
 
 public sealed partial class Parser
 {
+    // Dispatches on an identifier-led declaration: alias, function, or variable.
     private DeclarationSyntax ParseNamedDeclaration(
         DeclarationAccessibility accessibility
     )
     {
         SyntaxTokenKind binding = Peek(1).Kind;
-        if(binding == SyntaxTokenKind.ColonColon)
+
+        if (binding == SyntaxTokenKind.ColonColon)
         {
-            SyntaxTokenKind keyword = Peek(2).Kind;
-            return keyword switch
+            return Peek(2).Kind switch
             {
                 SyntaxTokenKind.Alias => ParseAliasDeclaration(accessibility),
-                _ => throw new Exception($"Expected 'class', 'enum', 'interface', or 'struct', but got {keyword} at position {Peek(2).Span.Start}")
+                SyntaxTokenKind.LeftParen => ParseFunctionDeclaration(accessibility),
+                _ => ParseVariableDeclaration(accessibility)
             };
         }
 
-        throw new Exception($"Expected '::' after identifier, but got {binding} at position {Peek(1).Span.Start}");
+        if (binding is SyntaxTokenKind.Colon or SyntaxTokenKind.ColonEqual or SyntaxTokenKind.ColonColonEqual)
+        {
+            return ParseVariableDeclaration(accessibility);
+        }
+
+        throw new ParseException($"Expected ':', '::', ':=' or '::=' after identifier, but got {binding} at position {Peek(1).Span.Start}");
     }
 }

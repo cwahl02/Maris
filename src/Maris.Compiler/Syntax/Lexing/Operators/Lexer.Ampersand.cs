@@ -4,18 +4,18 @@ public sealed partial class Lexer
 {
     private SyntaxToken LexAmpersand()
     {
-        var start = _iterator.Position;
-        if (TryMatch("&&"))
+        var start = _position;
+        if (Match("&&"))
         {
             return new SyntaxToken(SyntaxTokenKind.AmpersandAmpersand, start, 2);
         }
-        else if (TryMatch("&="))
+        else if (Match("&="))
         {
             return new SyntaxToken(SyntaxTokenKind.AmpersandEqual, start, 2);
         }
         else
         {
-            _iterator.Forward();
+            Advance();
             return new SyntaxToken(SyntaxTokenKind.Ampersand, start, 1);
         }
     }

@@ -14,7 +14,7 @@ public sealed partial class Parser
     {
         SyntaxToken leftBrace = Expect(SyntaxTokenKind.LeftBrace);
         List<StatementSyntax> statements = new List<StatementSyntax>();
-        while (!Match(SyntaxTokenKind.RightBrace) && Current.Kind != SyntaxTokenKind.Eof)
+        while (!Check(SyntaxTokenKind.RightBrace) && !IsAtEnd)
         {
             statements.Add(ParseStatement());
         }

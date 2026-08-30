@@ -1,64 +1,99 @@
 using Maris.Compiler.Syntax.Lexing;
-using Maris.Core.Iterator;
 
 namespace Maris.Compiler.Syntax.Parsing;
 
 public sealed partial class Parser
 {
-    private Iterator<SyntaxToken> _iterator;
+    private readonly IReadOnlyList<SyntaxToken> _tokens;
+    private int _position;
 
-    public Parser(List<SyntaxToken> tokens)
+    public Parser(IReadOnlyList<SyntaxToken> tokens)
     {
-        _iterator = new Iterator<SyntaxToken>(tokens);
+        _tokens = tokens;
     }
 
     public List<StatementSyntax> Parse()
     {
-        List<StatementSyntax> statements = new List<StatementSyntax>();
-        while (Current.Kind != SyntaxTokenKind.Eof)
+        List<StatementSyntax> statements = new();
+        while (!IsAtEnd)
         {
             statements.Add(ParseStatement());
         }
         return statements;
     }
 
-    private SyntaxToken Current => _iterator.Current;
-    private SyntaxToken Peek(int offset = 0) => _iterator.Peek(offset);
-    private void Forward() => _iterator.Forward();
-    private void Backward() => _iterator.Backward();
-    private int Position => _iterator.Position;
+    // ==================== Core Combinators ====================
 
-    private SyntaxToken Expect(SyntaxTokenKind kind)
+    private bool IsAtEnd => Current.Kind == SyntaxTokenKind.Eof;
+
+    private SyntaxToken Current => Peek(0);
+
+    private SyntaxToken Previous => Peek(-1);
+
+    private SyntaxToken Peek(int offset)
     {
-        if (Current.Kind != kind)
-        {
-            throw new Exception($"Expected token of kind {kind}, but got {Current.Kind} at position {Current.Span.Start}");
-        }
-
-        var token = Current;
-        Forward();
-        return token;
+        int index = _position + offset;
+        return index >= 0 && index < _tokens.Count ? _tokens[index] : SyntaxToken.Eof;
     }
 
-    private SyntaxToken Expect(params SyntaxTokenKind[] kinds)
-    {
-        if (!kinds.Contains(Current.Kind))
-        {
-            throw new Exception($"Expected token of kind {string.Join(", ", kinds)}, but got {Current.Kind} at position {Current.Span.Start}");
-        }
+    private bool Check(SyntaxTokenKind kind) => Current.Kind == kind;
 
-        var token = Current;
-        Forward();
+    private bool Check(params SyntaxTokenKind[] kinds) => kinds.Contains(Current.Kind);
+
+    private SyntaxToken Advance()
+    {
+        SyntaxToken token = Current;
+        if (!IsAtEnd)
+        {
+            _position++;
+        }
         return token;
     }
 
     private bool Match(SyntaxTokenKind kind)
     {
-        return Current.Kind == kind;
+        if (!Check(kind))
+        {
+            return false;
+        }
+
+        Advance();
+        return true;
     }
 
     private bool Match(params SyntaxTokenKind[] kinds)
     {
-        return kinds.Contains(Current.Kind);
+        if (!Check(kinds))
+        {
+            return false;
+        }
+
+        Advance();
+        return true;
     }
+
+    private SyntaxToken Expect(SyntaxTokenKind kind)
+    {
+        if (!Check(kind))
+        {
+            throw new ParseException($"Expected token of kind {kind}, but got {Current.Kind} at position {Current.Span.Start}");
+        }
+
+        return Advance();
+    }
+
+    private SyntaxToken Expect(params SyntaxTokenKind[] kinds)
+    {
+        if (!Check(kinds))
+        {
+            throw new ParseException($"Expected token of kind {string.Join(", ", kinds)}, but got {Current.Kind} at position {Current.Span.Start}");
+        }
+
+        return Advance();
+    }
+}
+
+public sealed class ParseException : Exception
+{
+    public ParseException(string message) : base(message) { }
 }

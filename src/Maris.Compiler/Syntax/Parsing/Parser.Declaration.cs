@@ -21,7 +21,7 @@ public sealed partial class Parser
             case SyntaxTokenKind.Identifier:
                 return ParseNamedDeclaration(accessibility);
             default:
-                throw new Exception($"Expected declaration, but got {Current.Kind} at position {Current.Span.Start}");
+                throw new ParseException($"Expected declaration, but got {Current.Kind} at position {Current.Span.Start}");
         } 
     }
 
@@ -29,7 +29,7 @@ public sealed partial class Parser
     {
         DeclarationAccessibility accessibility = ParseDeclarationAccessibility();
         DeclarationSyntax declaration = ParseDeclaration(accessibility);
-        SyntaxToken? semicolon = Match(SyntaxTokenKind.Semicolon) ? Expect(SyntaxTokenKind.Semicolon) : null;
+        SyntaxToken? semicolon = Match(SyntaxTokenKind.Semicolon) ? Previous : null;
 
         return new DeclarationStatement(declaration, semicolon);
     }
@@ -39,10 +39,10 @@ public sealed partial class Parser
         switch (Current.Kind)
         {
             case SyntaxTokenKind.Plus:
-                Forward();
+                Advance();
                 return DeclarationAccessibility.Public;
             case SyntaxTokenKind.Minus:
-                Forward();
+                Advance();
                 return DeclarationAccessibility.Private;
             default:
                 return DeclarationAccessibility.Public;

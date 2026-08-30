@@ -16,30 +16,18 @@ public sealed partial class Parser
     {
         SyntaxToken ifKeyword = Expect(SyntaxTokenKind.If);
         ExpressionSyntax condition = ParseExpression();
-
-        StatementSyntax then;
-        if (Current.Kind == SyntaxTokenKind.Colon)
-        {
-            Expect(SyntaxTokenKind.Colon);
-            then = ParseStatement();
-        }
-        else if (Current.Kind == SyntaxTokenKind.LeftBrace)
-        {
-            then = ParseBlock();
-        }
-        else
-        {
-            throw new Exception("Expected ':' or '{' after 'if' condition.");
-        }
+        StatementSyntax then = ParseControlBody();
 
         SyntaxToken? elseKeyword = null;
         StatementSyntax? elseStatement = null;
-        if (Current.Kind == SyntaxTokenKind.Else && Peek(1).Kind == SyntaxTokenKind.If)
+        if (Match(SyntaxTokenKind.Else))
         {
-            elseKeyword = Expect(SyntaxTokenKind.Else);
-            elseStatement = ParseIfStatement();
+            elseKeyword = Previous;
+            elseStatement = Current.Kind == SyntaxTokenKind.If
+                ? ParseIfStatement()
+                : ParseControlBody();
         }
-        
+
 
         return new IfStatement(
             ifKeyword,

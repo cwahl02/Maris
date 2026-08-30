@@ -4,14 +4,14 @@ public sealed partial class Lexer
 {
     private SyntaxToken LexBang()
     {
-        var start = _iterator.Position;
-        if (TryMatch("!="))
+        var start = _position;
+        if (Match("!="))
         {
             return new SyntaxToken(SyntaxTokenKind.BangEqual, start, 2);
         }
         else
         {
-            _iterator.Forward();
+            Advance();
             return new SyntaxToken(SyntaxTokenKind.Bang, start, 1);
         }
     }
