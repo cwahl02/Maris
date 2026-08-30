@@ -30,11 +30,21 @@ public sealed partial class Parser
         };
     }
 
-    // An identifier starts a named declaration when it is directly followed by a
-    // binding token (':', '::', ':=' or '::='); otherwise it is an expression.
-    private bool IsNamedDeclarationStart() => Peek(1).Kind is
-        SyntaxTokenKind.Colon or
-        SyntaxTokenKind.ColonColon or
-        SyntaxTokenKind.ColonEqual or
-        SyntaxTokenKind.ColonColonEqual;
+    // An identifier starts a named declaration when it (optionally followed by more
+    // comma-separated identifiers, per IdentifierList) is directly followed by a
+    // binding token (':', '::', ':=' or '::=' ); otherwise it is an expression.
+    private bool IsNamedDeclarationStart()
+    {
+        int offset = 1;
+        while (Peek(offset).Kind == SyntaxTokenKind.Comma && Peek(offset + 1).Kind == SyntaxTokenKind.Identifier)
+        {
+            offset += 2;
+        }
+
+        return Peek(offset).Kind is
+            SyntaxTokenKind.Colon or
+            SyntaxTokenKind.ColonColon or
+            SyntaxTokenKind.ColonEqual or
+            SyntaxTokenKind.ColonColonEqual;
+    }
 }

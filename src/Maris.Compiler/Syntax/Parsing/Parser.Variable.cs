@@ -16,6 +16,8 @@ public sealed partial class Parser
 {
     // VariableDeclaration := IdentifierList Binding Type? ('=' Expression)? ';'
     // Binding              := ':' | '::' | ':=' | '::='
+    // Note: ':=' and '::=' already imply an initializer, so no explicit type or
+    // '=' token follows them; the expression is parsed directly.
     private VariableDeclaration ParseVariableDeclaration(
         DeclarationAccessibility accessibility
     )
@@ -27,10 +29,20 @@ public sealed partial class Parser
             SyntaxTokenKind.ColonEqual,
             SyntaxTokenKind.ColonColonEqual);
 
-        TypeSyntax? type = Check(SyntaxTokenKind.Equal, SyntaxTokenKind.Semicolon) ? null : ParseType();
+        TypeSyntax? type = null;
+        SyntaxToken? equalToken = null;
+        ExpressionSyntax? initializer = null;
 
-        SyntaxToken? equalToken = Match(SyntaxTokenKind.Equal) ? Previous : null;
-        ExpressionSyntax? initializer = equalToken != null ? ParseExpression() : null;
+        if (binding.Kind is SyntaxTokenKind.ColonEqual or SyntaxTokenKind.ColonColonEqual)
+        {
+            initializer = ParseExpression();
+        }
+        else
+        {
+            type = Check(SyntaxTokenKind.Equal, SyntaxTokenKind.Semicolon) ? null : ParseType();
+            equalToken = Match(SyntaxTokenKind.Equal) ? Previous : null;
+            initializer = equalToken != null ? ParseExpression() : null;
+        }
 
         SyntaxToken semicolon = Expect(SyntaxTokenKind.Semicolon);
 

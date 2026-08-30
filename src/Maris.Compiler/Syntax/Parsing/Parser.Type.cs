@@ -40,10 +40,7 @@ public sealed record FunctionType(
     SeparatedSyntax<TypeSyntax> Parameters,
     SyntaxToken RightParen,
     SyntaxToken? Arrow,
-    SeparatedSyntax<TypeSyntax>? ReturnTypes,
-    SyntaxToken LeftBrace,
-    SyntaxToken RightBrace
-    //BlockSyntax? Body
+    SeparatedSyntax<TypeSyntax>? ReturnTypes
 ) : TypeSyntax;
 
 
@@ -141,10 +138,6 @@ public sealed partial class Parser
         SyntaxToken? arrow = Match(SyntaxTokenKind.Arrow) ? Previous : null;
         SeparatedSyntax<TypeSyntax>? returnTypes = arrow != null ? ParseSeparated(ParseType, SyntaxTokenKind.Comma) : null;
 
-        SyntaxToken leftBrace = Expect(SyntaxTokenKind.LeftBrace);
-        SyntaxToken rightBrace = Expect(SyntaxTokenKind.RightBrace);
-        //BlockSyntax? body = Current.Kind == SyntaxTokenKind.LeftBrace ? ParseBlock() : null;
-
-        return new FunctionType(leftParen, parameters, rightParen, arrow, returnTypes, leftBrace, rightBrace);
+        return new FunctionType(leftParen, parameters, rightParen, arrow, returnTypes);
     }
 }
