@@ -1,0 +1,7 @@
+VariableDeclaration
+    := IdentifierList Binding Type? ('=')? Expression? ';'
+
+*Binding
+*IdentifierList
+*Expression
+*Type

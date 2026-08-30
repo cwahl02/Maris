@@ -1,0 +1,15 @@
+FunctionDeclaration
+    := Identifier '::' '(' ParameterList ')' ReturnClause? Block
+
+ParameterList
+    := ParameterGroup (',' ParameterGroup)*
+
+ParameterGroup
+    := IdentifierList (':' | '::') Type ('=' Literal)?
+
+ReturnClause := '->' TypeList
+
+*Block
+*Identifier
+*Type
+*TypeList

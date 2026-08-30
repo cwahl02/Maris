@@ -2,12 +2,6 @@ namespace Maris.Core.Diagnostics;
 
 using Maris.Core.Text;
 
-public sealed record Diagnostic(
-    DiagnosticSeverity Severity,
-    string Message,
-    TextSpan Span
-);
-
 public enum DiagnosticSeverity
 {
     Info,
@@ -15,19 +9,18 @@ public enum DiagnosticSeverity
     Error
 }
 
-public sealed class DiagnosticBag
+public sealed class Diagnostic
 {
-    private readonly List<Diagnostic> _diagnostics = new();
+    public DiagnosticSeverity Severity { get; }
+    public string Code { get; }
+    public string Message { get; }
+    public TextSpan Span { get; }
 
-    public IReadOnlyList<Diagnostic> Diagnostics => _diagnostics;
-
-    public void Add(Diagnostic diagnostic)
+    public Diagnostic(DiagnosticSeverity severity, string code, string message, TextSpan span)
     {
-        _diagnostics.Add(diagnostic);
-    }
-
-    public void AddRange(IEnumerable<Diagnostic> diagnostics)
-    {
-        _diagnostics.AddRange(diagnostics);
+        Severity = severity;
+        Code = code;
+        Message = message;
+        Span = span;
     }
 }

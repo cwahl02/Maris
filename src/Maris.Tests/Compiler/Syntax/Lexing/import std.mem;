@@ -1,0 +1,53 @@
+import std.mem;
+import os.windows as win;
+
+// 1. Foreign Block / C FFI Declarations
+foreign "libc" {
+    printf(format: *u8, value: i32) -> i32;
+    malloc(size: u64) -> *u8;
+    free(ptr: *u8) -> void;
+}
+
+// 2. User Defined Type Declarations (Constants via ::)
+Node :: struct {
+    value: i32 = 0;
+    next: *Node = null;
+    linear_handle: !*u8 = null; // Linear ownership pointer
+}
+
+// 3. Constant Value Bindings (Global constants)
+MAX_CONNECTIONS :: u64 = 1024;
+
+// 4. Entry point and explicit assignments
+main :: () -> i32 {
+    // Mutable assignment with explicit types
+    counter: i32 = 0;
+    
+    // Type inference mappings
+    inferred_mut := 42;
+    inferred_const ::= 999;
+
+    // Complex Left-to-Right Type Layout Stress-Test
+    // Means: Pointer to a linear Pointer to a fixed-array of 10 items of Node
+    matrix: *!*[10]Node = null;
+
+    // 5. Control Flow & Operators
+    if counter == 0: {
+        io_print("Branch single-line or block match!");
+    } else:
+        counter = counter + 1;
+
+    // 6. Memory allocations and pointer routing
+    raw_mem := malloc(Node.sizeof);
+    node_ptr: *Node = raw_mem;
+    
+    // Explicit pointer tracking & assignment
+    node_ptr.value = 100;
+    
+    // 7. Defer & Linear Move semantics
+    defer free(raw_mem);
+    
+    local_linear: !*u8 = move node_ptr.linear_handle;
+
+    return 0;
+}

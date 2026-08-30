@@ -1,0 +1,16 @@
+Binding := ':' | '::' | ':=' | '::='
+IdentifierList := Identifier (',' Identifier)*
+Expression := ...
+
+Block := '{' Statement* '}'
+ControlBody := (':' Statement? | Block)
+
+Literal
+	:= Identifier
+	 | IntegerLiteral
+	 | FloatLiteral
+	 | CharacterLiteral
+	 | StringLiteral
+	 | BooleanLiteral
+	 | NullLiteral
+	 | ArrayLiteral

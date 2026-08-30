@@ -1,0 +1,15 @@
+ForStatement
+    := 'for' ForClause ControlBody
+
+ForClause
+    := ForInitializer? ForCondition? ForIteration?
+
+ForInitializer
+    := VariableDeclaration | Expression
+
+ForCondition := Expression
+ForIteration := Expression
+
+*ControlBody
+*Expression
+*VariableDeclaration

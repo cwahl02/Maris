@@ -1,0 +1,12 @@
+StructDeclaration
+    := Identifier '::' 'struct' '{' StructMemberList '}'
+
+StructMemberList
+    := StructMember*
+
+StructMember
+    := VariableDeclaration | FunctionDeclaration
+
+*FunctionDeclaration
+*Identifer
+*VariableDeclaration

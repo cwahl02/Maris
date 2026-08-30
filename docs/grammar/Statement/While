@@ -1,0 +1,5 @@
+WhileStatement
+    := 'while' Expression ControlBody
+
+*ControlBody
+*Expression
