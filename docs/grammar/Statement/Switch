@@ -1,0 +1,9 @@
+SwitchStatement
+    := 'switch' Expression '{' SwitchCase* '}'
+
+SwitchCase
+    := 'case' Expression (':' Statement* | Block)
+
+*Block
+*Expression
+*Statement

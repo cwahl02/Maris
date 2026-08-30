@@ -1,0 +1,8 @@
+EnumDeclaration
+    := Identifer '::' 'enum' Range '{' EnumValueList '}'
+
+EnumValueList
+    := EnumValue (',' EnumValue)*
+
+EnumValue
+    := Identifer ('=' Literal)?

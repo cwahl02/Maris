@@ -1,0 +1,12 @@
+UnionDeclaration
+    := Identifier '::' 'union' '{' UnionFieldList '}'
+
+UnionFieldList
+    := UnionField*
+
+UnionField
+    := VariableDeclaration | FunctionDeclaration
+
+*FunctionDeclaration
+*Identifer
+*VariableDeclaration
