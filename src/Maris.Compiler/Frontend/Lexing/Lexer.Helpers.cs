@@ -65,11 +65,10 @@ public sealed partial class Lexer
                 Advance(2); // Skip the '/*' characters
                 depth++;
             }
-            if (Current == '*' && Peek(1) == '/')
+            else if (Current == '*' && Peek(1) == '/')
             {
                 Advance(2); // Skip the '*/' characters
                 depth--;
-                continue;
             }
             else
             {
@@ -77,9 +76,8 @@ public sealed partial class Lexer
             }
         }
 
-        // If we reach here, it means we reached the end of the text without finding a closing '*/'
-        // You might want to handle this case (e.g., report an error)
-        return false;
+        // We consumed a block comment (possibly unterminated if we hit the end of text).
+        return true;
     }
 
     private bool TryMatch(string expected)

@@ -39,7 +39,6 @@ public sealed partial class Lexer(string text)
         if (IsIdentifierStart(Current))
         {
             return LexIdentifier();
-            // Add token to the list of tokens
         }
         else if (Char.IsDigit(Current))
         {
